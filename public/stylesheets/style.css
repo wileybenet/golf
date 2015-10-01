@@ -1,0 +1,23 @@
+body {
+  padding: 50px;
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+}
+
+a {
+  color: #00B7FF;
+}
+
+h1, h2, h3 {
+  letter-spacing: 3px;
+  font-family: 'RonsardCrystal-Bold';
+  font-weight: normal;
+}
+
+img {
+  margin-right: 10px;
+}
+
+
+.middle {
+  vertical-align: middle;
+}
