@@ -50,8 +50,26 @@ table td {
 }
 
 .hole {
+  display: inline-block;
+  vertical-align: top;
+}
+
+.over-under--1 {
+  background-color: #CBFBCB;
+}
+.over-under-1 {
+  background-color: #FFE4CB;
+}
+.over-under-2 {
+  background-color: #FD9A69;
+}
+.over-under-3 {
+  background-color: #F54C4C;
+}
+
+.hole-map {
   height: 125px;
-  width: 60px;
+  width: 50px;
   display: inline-block;
   background-size: 80px; 
   background-repeat: no-repeat;
@@ -59,8 +77,18 @@ table td {
   position: relative;
 }
 
+.focus > div {
+  height: 290px;
+  width: 140px;
+  background-size: 200px;
+}
+
 .first {
   text-align: left;
+}
+.top {
+  vertical-align: top;
+  display: inline-block;
 }
 .middle {
   vertical-align: middle;
@@ -75,6 +103,9 @@ table td {
 }
 .small {
   font-size: 12px;
+}
+.caps {
+  text-transform: capitalize;
 }
 
 

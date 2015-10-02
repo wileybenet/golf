@@ -8,8 +8,12 @@ var App = React.createClass({
   render: function() {
     return (
       <div className="app">
-        <Rounds className="rounds" onSelect={this.selectRound} />
-        { this.state.round.id ? <Scorecard className="scorecard" round={this.state.round} /> : null }
+        <div className="top">
+          <Rounds onSelect={this.selectRound} />
+        </div>
+        <div className="top">
+          { this.state.round.id ? <Scorecard round={this.state.round} /> : null }
+        </div>
       </div>);
   }
 });
@@ -34,6 +38,12 @@ var Rounds = React.createClass({
 });
 
 var RoundList = React.createClass({
+  componentWillReceiveProps: function(props) {
+    if (!this.$once) {
+      this.props.onSelect(props.data[0]);
+      this.$once = true;
+    }
+  },
   render: function() {
     var selectFn = this.props.onSelect;
     var roundNodes = this.props.data.map(function(round, idx) {
@@ -64,7 +74,9 @@ var Round = React.createClass({
         <div className="middle">
           {this.props.round.name}
           <div className="small">{this.props.round.date_str}</div>
-          <div className="small">Par {this.props.round.total_par} shot {toPar} {overUnder} {this.props.round.total_score}</div>
+          <div className="small">Par {this.props.round.total_par}</div>
+          <div className="small caps">{this.props.round.tees} {this.props.round[this.props.round.tees + '_dist']} yds</div>
+          <div className="small">{toPar} {overUnder}</div>
         </div>
       </div>
     );
@@ -83,10 +95,14 @@ var Summary = React.createClass({
     }
 
     var handicaps = this.props.data.map(getHandicap);
-    var handicap = (utils.sum(handicaps, 'handicap') / handicaps.length).toFixed(1);
+    var handicap = utils.sum(handicaps, 'handicap') / handicaps.length;
+    var handicapIndex;
+    (handicap * 0.96).toFixed(10).replace(/^[^.]+\../, function(match) {
+      handicapIndex = match;
+    });
     return (
       <div className="summary">
-        <div>Handicap {handicap}</div>
+        <div>Handicap {handicapIndex}</div>
       </div>);
   }
 });
@@ -109,118 +125,117 @@ var Scorecard = React.createClass({
 
 var HoleList = React.createClass({
   render: function() {
-    function formatHoles(arr, back) {
-      var this_ = this;
-      var rows = {
-        imgNodes: [],
-        holeNodes: [],
-        distNodes: [],
-        parNodes: [],
-        scoreNodes: [],
-        girNodes: [],
-        puttNodes: []
-      };
-      var sideScore = utils.sum(arr, 'score');
-      var totalScore;
-      var totalGir;
-      var totalDist;
-      var totalPar;
-      var totalPutts;
+    function calcSide(side, arr, round) {
       var nonPar3 = arr.filter(function(el) {
         return el.par !== 3;
       });
-      var sideGir = nonPar3.filter(function(el) {
-        return el.gir;
-      }).length + '/' + nonPar3.length;
-      var side = back ? 'In' : 'Out';
-      var sideDist = utils.sum(arr, this.props.round.tees);
-      var sidePar = utils.sum(arr, 'par');
-      var sidePutts = utils.sum(arr, 'putts');
-
-      if (!back) {
-        rows.imgNodes.push(<td></td>);
-        rows.holeNodes.push(<td className="first">Hole</td>);
-        rows.distNodes.push(<td className="first">Distance</td>);
-        rows.parNodes.push(<td className="first">Par</td>);
-        rows.scoreNodes.push(<td className="first">Score</td>);
-        rows.girNodes.push(<td className="first">GIR</td>);
-        rows.puttNodes.push(<td className="first">Putts</td>);
-      }
-
-      arr.forEach(function(hole, idx) {
-        var style = {
-          backgroundImage: 'url(images/holes/' + hole.course_id + '-' + hole.number + '.png)'
-        };
-        var gir = (hole.par !== 3 ? (hole.gir ? '&#x2713;' : '&#x2717;') : '');
-        var classes = (hole.par !== 3 ? (hole.gir ? 'green' : 'red') : '');
-
-        rows.imgNodes.push(<td key={idx}><div className="hole" style={style}></div></td>);
-        rows.holeNodes.push(<td key={idx}>{hole.number}</td>);
-        rows.distNodes.push(<td key={idx}>{hole[this_.props.round.tees]}</td>);
-        rows.parNodes.push(<td key={idx}>{hole.par}</td>);
-        rows.scoreNodes.push(<td key={idx}>{hole.score}</td>);
-        rows.girNodes.push(<td className={classes} key={idx} dangerouslySetInnerHTML={{__html: gir}} />);
-        rows.puttNodes.push(<td key={idx}>{hole.putts}</td>);
-      });
-
-      rows.imgNodes.push(<td></td>);
-      rows.holeNodes.push(<td>{side}</td>);
-      rows.distNodes.push(<td>{sideDist}</td>);
-      rows.parNodes.push(<td>{sidePar}</td>);
-      rows.scoreNodes.push(<td>{sideScore}</td>);
-      rows.girNodes.push(<td>{sideGir}</td>);
-      rows.puttNodes.push(<td>{sidePutts}</td>);
-
-      if (back) {
-        totalScore = utils.sum(back, 'score');
-        totalPar = utils.sum(back, 'par');
-        totalPutts = utils.sum(back, 'putts');
-        totalDist = utils.sum(back, this.props.round.tees);
-        nonPar3 = back.filter(function(el) {
-          return el.par !== 3;
-        });
-        totalGir = nonPar3.filter(function(el) {
+      return {
+        number: side,
+        pros: utils.sum(arr, round.tees),
+        tips: utils.sum(arr, round.tees),
+        par: utils.sum(arr, 'par'),
+        score: utils.sum(arr, 'score'),
+        gir: nonPar3.filter(function(el) {
           return el.gir;
-        }).length + '/' + nonPar3.length;
-        rows.imgNodes.push(<td></td>);
-        rows.holeNodes.push(<td>Total</td>);
-        rows.distNodes.push(<td>{totalDist}</td>);
-        rows.parNodes.push(<td>{totalPar}</td>);
-        rows.scoreNodes.push(<td>{totalScore}</td>);
-        rows.girNodes.push(<td>{totalGir}</td>);
-        rows.puttNodes.push(<td>{totalPutts}</td>);
-      }
-      return rows;
+        }).length + '/' + nonPar3.length,
+        putts: utils.sum(arr, 'putts')
+      };
     }
 
-    var frontNine = formatHoles.call(this, this.props.data.slice(0,9));
-    var backNine = formatHoles.call(this, this.props.data.slice(9,18), this.props.data);
-
-    var summary = {
-      round: this.props.round,
-      scores: this.props.data
+    var headers = {
+      align: 'left',
+      number: 'Hole',
+      pros: 'Distance',
+      tips: 'Distance',
+      par: 'Par',
+      score: 'Score',
+      gir: 'GIR',
+      putts: 'Putts'
     };
+    var front = this.props.data.slice(0, 9);
+    var frontNonPar3 = front.filter(function(el) {
+      return el.par !== 3;
+    });
+    var frontNine = calcSide('Out', this.props.data.slice(0, 9), this.props.round);
+    var backNine = calcSide('In', this.props.data.slice(9, 18), this.props.round);
+    var eighteen = calcSide('Total', this.props.data, this.props.round);
+
+    var round = this.props.round;
+
+    var holeNodes = this.props.data.map(function(hole, idx) {
+      return (
+        <div className="hole">
+          <Hole data={hole} round={round} />
+        </div>
+      );
+    });
+
+
+    holeNodes.unshift((
+      <div className="hole">
+        <Hole data={headers} round={round} />
+      </div>
+    ));
     
+    holeNodes.splice(10, 0, (
+      <div className="hole">
+        <Hole data={frontNine} round={round} />
+      </div>
+    ));
+
+    holeNodes.push((
+      <div className="hole">
+        <Hole data={backNine} round={round} />
+      </div>
+    ));
+
+    holeNodes.push((
+      <div className="hole">
+        <Hole data={eighteen} round={round} />
+      </div>
+    ));
+
     return (
       <div>
-        <table className="out">
-          <tr>{frontNine.imgNodes}</tr>
-          <tr className="grid">{frontNine.holeNodes}</tr>
-          <tr className="grid">{frontNine.distNodes}</tr>
-          <tr className="grid">{frontNine.parNodes}</tr>
-          <tr className="grid">{frontNine.scoreNodes}</tr>
-          <tr className="grid">{frontNine.girNodes}</tr>
-          <tr className="grid">{frontNine.puttNodes}</tr>
-        </table>
-        <table className="in">
-          <tr>{backNine.imgNodes}</tr>
-          <tr className="grid">{backNine.holeNodes}</tr>
-          <tr className="grid">{backNine.distNodes}</tr>
-          <tr className="grid">{backNine.parNodes}</tr>
-          <tr className="grid">{backNine.scoreNodes}</tr>
-          <tr className="grid">{backNine.girNodes}</tr>
-          <tr className="grid">{backNine.puttNodes}</tr>
-        </table>
+        {holeNodes}
+      </div>
+    );
+  }
+});
+
+var Hole = React.createClass({
+  toggle: function() {
+    this.setState({ toggle: !this.state.toggle });
+  },
+  getInitialState: function() {
+    return { toggle: false };
+  },
+  render: function() {
+    var style = {
+      backgroundImage: 'url(images/holes/' + this.props.data.course_id + '-' + this.props.data.number + '.png)'
+    };
+    var gir = (this.props.data.par !== 3 ? (this.props.data.gir ? '&#x2713;' : '&#x2717;') : '&nbsp;');
+    var overUnder = 'over-under-' + (this.props.data.score - this.props.data.par);
+    var focused = this.state.toggle ? 'focus' : 'unfocus';
+
+    if (!this.props.data.id) {
+      gir = this.props.data.gir || '&nbsp;';
+      overUnder = null;
+    }
+
+    return (
+      <div style={ { textAlign: this.props.data.align || 'center' } } onClick={this.toggle}>
+        <div className={focused}>
+          <div className="hole-map" style={this.props.data.id ? style : null}></div>
+        </div>
+        <div className={this.state.toggle ? 'focus-info' : 'unfocus-info'}>
+          <div>{this.props.data.number}</div>
+          <div>{this.props.data[this.props.round.tees]}</div>
+          <div>{this.props.data.par}</div>
+          <div className={overUnder}>{this.props.data.score}</div>
+          <div dangerouslySetInnerHTML={{__html: gir}} />
+          <div>{this.props.data.putts}</div>
+        </div>
       </div>
     );
   }
@@ -230,3 +245,6 @@ React.render((
   <App/>),
   document.body
 );
+
+
+
