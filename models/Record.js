@@ -78,8 +78,20 @@ record.staticMethods = {
     this.$singleResult = true;
     this.where({ id: id }).limit(1);
   },
-  joins: function(condition) {
+  joins: function(sql) {
+    this.queryParams.joins.push(sql);
+  },
+  group: function(keys) {
+    var groups;
+    if (typeof keys === 'object') {
+      groups = keys;
+    } else {
+      groups = keys.split(/,/g);
+    }
 
+    this.queryParams.group = this.queryParams.group.concat(groups.map(function(el) {
+      return el.trim();
+    }));
   },
   where: function(condition) {
     for (var key in condition) {
@@ -94,8 +106,7 @@ record.staticMethods = {
     var q = '';
     var params = [];
     if (_.size(this.queryParams.select)) {
-      params.push(this.queryParams.select);
-      q += 'SELECT ??';
+      q += 'SELECT ' + this.queryParams.select.join(', ');
     } else {
       q += 'SELECT *';
     }
@@ -103,9 +114,16 @@ record.staticMethods = {
       params.push(this.tableName);
       q += ' FROM ??';
     }
+    if (_.size(this.queryParams.joins)) {
+      q += ' ' + this.queryParams.joins.join(' ');
+    }
     if (_.size(this.queryParams.where)) {
       params.push(this.queryParams.where);
       q += ' WHERE ?';
+    }
+    if (_.size(this.queryParams.group)) {
+      params.push(this.queryParams.group);
+      q += ' GROUP BY ?';
     }
     if (this.queryParams.limit) {
       params.push(this.queryParams.limit);

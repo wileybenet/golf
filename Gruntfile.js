@@ -58,6 +58,7 @@ module.exports = function(grunt) {
         script: './bin/www',
         options: {
           nodeArgs: ['--debug'],
+          ignore: ["public/**/*"],
           env: {
             PORT: '<%= env.PORT %>',
             ENV: '<%= env.ENV %>'
@@ -90,10 +91,17 @@ module.exports = function(grunt) {
       }
     },
     watch: {
-      files: ['<%= jshint.files %>', 'public/**/*'],
+      // files: ['<%= jshint.files %>', 'public/**/*'],
       // tasks: ['jshint', 'qunit'],
       server: {
         files: ['logs/.rebooted'],
+        options: {
+          livereload: true,
+          spawn: false
+        }
+      },
+      public: {
+        files: ['public/**/*'],
         options: {
           livereload: true,
           spawn: false

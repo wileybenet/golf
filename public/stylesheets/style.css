@@ -1,6 +1,6 @@
 body {
   padding: 50px;
-  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  font-family: sans-serif;
 }
 
 a {
@@ -9,7 +9,6 @@ a {
 
 h1, h2, h3 {
   letter-spacing: 3px;
-  font-family: 'RonsardCrystal-Bold';
   font-weight: normal;
 }
 
@@ -17,7 +16,68 @@ img {
   margin-right: 10px;
 }
 
+.summary {
+  position: relative;
+  margin-bottom: 20px;
+}
 
+table {
+  border-collapse: collapse;
+  display: inline-block;
+  border-top: 1px solid #DDD;
+}
+table.out {
+  border-left: 1px solid #DDD;
+}
+table.in {
+  border-right: 1px solid #DDD;
+}
+table .grid td {
+  border: 1px solid #DDD;
+  border-left: 0px;
+}
+table td {
+  margin: 0px;
+  padding: 4px 2px;
+  text-align: center;
+  min-width: 50px;
+  font-size: 12px;
+}
+
+.round-list {
+  width: 300px;
+  display: inline-block;
+}
+
+.hole {
+  height: 125px;
+  width: 60px;
+  display: inline-block;
+  background-size: 80px; 
+  background-repeat: no-repeat;
+  background-position: center;
+  position: relative;
+}
+
+.first {
+  text-align: left;
+}
 .middle {
   vertical-align: middle;
+  display: inline-block;
 }
+
+.green {
+  background-color: #E7F5E7;
+}
+.red {
+  background-color: #FDECEC;
+}
+.small {
+  font-size: 12px;
+}
+
+
+
+
+
