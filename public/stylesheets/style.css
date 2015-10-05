@@ -16,32 +16,28 @@ img {
   margin-right: 10px;
 }
 
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  z-index: 100;
+  width: 100%;
+  height: 100%;
+}
+
+.modal .dialog {
+  position: absolute;
+  top: 100px;
+  left: 50%;
+  margin-left: -200px;
+  width: 400px;
+  background-color: #FFF;
+}
+
 .summary {
   position: relative;
   margin-bottom: 20px;
-}
-
-table {
-  border-collapse: collapse;
-  display: inline-block;
-  border-top: 1px solid #DDD;
-}
-table.out {
-  border-left: 1px solid #DDD;
-}
-table.in {
-  border-right: 1px solid #DDD;
-}
-table .grid td {
-  border: 1px solid #DDD;
-  border-left: 0px;
-}
-table td {
-  margin: 0px;
-  padding: 4px 2px;
-  text-align: center;
-  min-width: 50px;
-  font-size: 12px;
 }
 
 .round-list {
@@ -54,22 +50,30 @@ table td {
   vertical-align: top;
 }
 
+.over-under {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: 30px;
+}
+.over-under--2 {
+  background-image: url('../images/icons/eagle.png');
+}
 .over-under--1 {
-  background-color: #CBFBCB;
+  background-image: url('../images/icons/birdie.png');
 }
 .over-under-1 {
-  background-color: #FFE4CB;
+  background-image: url('../images/icons/bogie.png');
 }
 .over-under-2 {
-  background-color: #FD9A69;
+  background-image: url('../images/icons/dblbogie.png');
 }
 .over-under-3 {
-  background-color: #F54C4C;
+  background-image: url('../images/icons/trplbogie.png');
 }
 
 .hole-map {
   height: 125px;
-  width: 50px;
+  width: 40px;
   display: inline-block;
   background-size: 80px; 
   background-repeat: no-repeat;
@@ -77,10 +81,10 @@ table td {
   position: relative;
 }
 
-.focus > div {
-  height: 290px;
-  width: 140px;
-  background-size: 200px;
+
+.info > div {
+  font-size: 12px;
+  padding: 11px 0;
 }
 
 .first {
@@ -108,6 +112,9 @@ table td {
   text-transform: capitalize;
 }
 
+.hidden {
+  display: none;
+}
 
 
 

@@ -1,9 +1,24 @@
+require('../stylesheets/font-awesome.min');
+require('../stylesheets/style');
+var React = require('react');
+var comet = require('./comet');
+var utils = require('./utils');
+var emitter = require('./modules/emitter');
+
+var HoleModal = require('./modules/HoleModal');
+
 var App = React.createClass({
+  componentDidMount: function() {
+    var this_ = this;
+    emitter.on('hole.select', function(data) {
+      this_.setState({ modalData: data });
+    });
+  },
   selectRound: function(round) {
     this.setState({ round: round });
   },
   getInitialState: function() {
-    return { round: {} };
+    return { round: {}, modalData: null };
   },
   render: function() {
     return (
@@ -14,6 +29,7 @@ var App = React.createClass({
         <div className="top">
           { this.state.round.id ? <Scorecard round={this.state.round} /> : null }
         </div>
+        { this.state.modalData ? <HoleModal data={this.state.modalData} /> : null }
       </div>);
   }
 });
@@ -123,123 +139,7 @@ var Scorecard = React.createClass({
   }
 });
 
-var HoleList = React.createClass({
-  render: function() {
-    function calcSide(side, arr, round) {
-      var nonPar3 = arr.filter(function(el) {
-        return el.par !== 3;
-      });
-      return {
-        number: side,
-        pros: utils.sum(arr, round.tees),
-        tips: utils.sum(arr, round.tees),
-        par: utils.sum(arr, 'par'),
-        score: utils.sum(arr, 'score'),
-        gir: nonPar3.filter(function(el) {
-          return el.gir;
-        }).length + '/' + nonPar3.length,
-        putts: utils.sum(arr, 'putts')
-      };
-    }
-
-    var headers = {
-      align: 'left',
-      number: 'Hole',
-      pros: 'Distance',
-      tips: 'Distance',
-      par: 'Par',
-      score: 'Score',
-      gir: 'GIR',
-      putts: 'Putts'
-    };
-    var front = this.props.data.slice(0, 9);
-    var frontNonPar3 = front.filter(function(el) {
-      return el.par !== 3;
-    });
-    var frontNine = calcSide('Out', this.props.data.slice(0, 9), this.props.round);
-    var backNine = calcSide('In', this.props.data.slice(9, 18), this.props.round);
-    var eighteen = calcSide('Total', this.props.data, this.props.round);
-
-    var round = this.props.round;
-
-    var holeNodes = this.props.data.map(function(hole, idx) {
-      return (
-        <div className="hole">
-          <Hole data={hole} round={round} />
-        </div>
-      );
-    });
-
-
-    holeNodes.unshift((
-      <div className="hole">
-        <Hole data={headers} round={round} />
-      </div>
-    ));
-    
-    holeNodes.splice(10, 0, (
-      <div className="hole">
-        <Hole data={frontNine} round={round} />
-      </div>
-    ));
-
-    holeNodes.push((
-      <div className="hole">
-        <Hole data={backNine} round={round} />
-      </div>
-    ));
-
-    holeNodes.push((
-      <div className="hole">
-        <Hole data={eighteen} round={round} />
-      </div>
-    ));
-
-    return (
-      <div>
-        {holeNodes}
-      </div>
-    );
-  }
-});
-
-var Hole = React.createClass({
-  toggle: function() {
-    this.setState({ toggle: !this.state.toggle });
-  },
-  getInitialState: function() {
-    return { toggle: false };
-  },
-  render: function() {
-    var style = {
-      backgroundImage: 'url(images/holes/' + this.props.data.course_id + '-' + this.props.data.number + '.png)'
-    };
-    var gir = (this.props.data.par !== 3 ? (this.props.data.gir ? '&#x2713;' : '&#x2717;') : '&nbsp;');
-    var overUnder = 'over-under-' + (this.props.data.score - this.props.data.par);
-    var focused = this.state.toggle ? 'focus' : 'unfocus';
-
-    if (!this.props.data.id) {
-      gir = this.props.data.gir || '&nbsp;';
-      overUnder = null;
-    }
-
-    return (
-      <div style={ { textAlign: this.props.data.align || 'center' } } onClick={this.toggle}>
-        <div className={focused}>
-          <div className="hole-map" style={this.props.data.id ? style : null}></div>
-        </div>
-        <div className={this.state.toggle ? 'focus-info' : 'unfocus-info'}>
-          <div>{this.props.data.number}</div>
-          <div>{this.props.data[this.props.round.tees]}</div>
-          <div>{this.props.data.par}</div>
-          <div className={overUnder}>{this.props.data.score}</div>
-          <div dangerouslySetInnerHTML={{__html: gir}} />
-          <div>{this.props.data.putts}</div>
-        </div>
-      </div>
-    );
-  }
-});
+var HoleList = require('./modules/HoleList'); 
 
 React.render((
   <App/>),

@@ -8,7 +8,7 @@ var router = express.Router();
 
 var cometRoutes = './routes/';
 var distTemplate = fs.readFileSync(path.resolve(__dirname, 'router.js.tpl')).toString();
-var distPath = path.resolve(__dirname, '../public/dist');
+var distPath = path.resolve(__dirname, '../public/javascripts');
 
 var cometApi = [];
 var cometNamespaces  = [];

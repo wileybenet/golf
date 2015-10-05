@@ -9,6 +9,7 @@ module.exports = {
         "DATE_FORMAT(date, '%b %d, %Y') AS 'date_str'",
         "SUM(score) AS 'total_score'",
         "SUM(par) AS 'total_par'",
+        "score - par AS 'over_under'",
         "SUM(pros) AS 'pros_dist'",
         "SUM(tips) AS 'tips_dist'"])
       .joins("INNER JOIN courses ON courses.id = rounds.course_id "+

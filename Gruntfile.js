@@ -102,28 +102,7 @@ module.exports = function(grunt) {
       },
       public: {
         files: ['public/**/*'],
-        options: {
-          livereload: true,
-          spawn: false
-        }
-      },
-      css: {
-        files: ['public/stylesheets/*'],
-        options: {
-          livereload: true,
-          spawn: false
-        }
-      },
-      js: {
-        files: ['public/javascripts/*'],
-        tasks: ['jshint'],
-        options: {
-          livereload: true,
-          spawn: false
-        }
-      },
-      jade: {
-        files: ['views/*'],
+        tasks: ['webpack'],
         options: {
           livereload: true,
           spawn: false
@@ -133,6 +112,15 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('test', ['jshint', 'qunit']);
+
+  grunt.registerTask('webpack', 'webpack[ing]', function() {
+    var done = this.async();
+    var child = require('child_process').spawn('webpack');
+    child.on('close', function() {
+      fs.writeFileSync('logs/.rebooted', 'rebooted');
+      done();
+    });
+  });
 
   grunt.registerTask('process', ['jshint', /*'qunit',*/ 'concat', 'uglify']);
 
