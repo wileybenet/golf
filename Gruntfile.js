@@ -116,7 +116,10 @@ module.exports = function(grunt) {
   grunt.registerTask('webpack', 'webpack[ing]', function() {
     var done = this.async();
     var child = require('child_process').spawn('webpack');
-    child.on('close', function() {
+    child.stdout.on('data', function(data) {
+      console.log(data.toString()); 
+    });
+    child.on('close', function(err, stdout) {
       fs.writeFileSync('logs/.rebooted', 'rebooted');
       done();
     });

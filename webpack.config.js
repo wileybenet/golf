@@ -6,7 +6,9 @@ module.exports = {
     filename: 'bundle.js'
   },
   externals: {
-    react: 'React'
+    'react': 'React',
+    'paper': 'paper',
+    '$': '$'
   },
   module: {
     loaders: [

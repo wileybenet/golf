@@ -6,10 +6,16 @@ function uri(ns, method) {
 
 var comet = {
   $get: function(route, callback) {
-    $.get(route).success(callback);
+    $.get(route, callback);
   },
   $post: function(route, data, callback) {
-    $.post(route, data).success(callback);
+    $.ajax({
+      type: 'POST',
+      url: route,
+      data: JSON.stringify(data),
+      contentType: 'application/json',
+      success: callback
+    });
   }
 };
 

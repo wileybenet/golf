@@ -13,14 +13,21 @@ h1, h2, h3 {
 }
 
 img {
-  margin-right: 10px;
+  margin: 0;
+  padding: 0;
+}
+input[type=text] {
+  width: 40px;
+  border-radius: 3px;
+  border: 1px solid #DDD;
+  display: block;
 }
 
 .modal {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.7);
+  background-color: rgba(255, 255, 255, 0.9);
   z-index: 100;
   width: 100%;
   height: 100%;
@@ -28,32 +35,134 @@ img {
 
 .modal .dialog {
   position: absolute;
-  top: 100px;
+  top: 60px;
   left: 50%;
-  margin-left: -200px;
-  width: 400px;
+  margin-left: -260px;
+  width: 490px;
   background-color: #FFF;
+  border: 1px solid #DDD;
+  border-radius: 3px;
+  padding: 15px;
+  font-size: 14px;
+}
+.modal .dialog.wide {
+  margin-left: -460px;
+  width: 890px;
+}
+.modal-submit {
+  margin: 40px 0 0 0;
+}
+.left-slide, .right-slide {
+  position: absolute;
+  top: 150px;
+  font-size: 54px;
+  cursor: pointer;
+}
+.left-slide {
+  left: -70px;
+}
+.left-slide i {
+  padding-right: 15px;
+}
+.right-slide {
+  right: -70px;
+}
+.right-slide i {
+  padding-left: 15px;
 }
 
-.summary {
+.handicap-summary {
   position: relative;
   margin-bottom: 20px;
 }
 
+.round-actions {
+  margin: 0 0 15px 0;
+}
 .round-list {
-  width: 300px;
+  width: 240px;
   display: inline-block;
+}
+.round {
+  width: 220px;
+  margin: 20px 0;
+  cursor: pointer;
+  position: relative;
+  border-right: 1px solid transparent;
+}
+.round:hover {
+
+}
+.round.selected {
+  border-right-color: #CCC;
+}
+.round-info {
+  margin-left: 10px;
+}
+
+.arrow-left {
+  width: 1px;
+  height: 0;
+  border: 9px solid transparent;
+  border-left: 0;
+  border-right-color: #CCC;
+  position: absolute;
+  right: -1px;
+  top: 29px;
+}
+.arrow-left div {
+  width: 1px;
+  height: 0;
+  border: 9px solid transparent;
+  border-left: 0;
+  border-right-color: #FFF;
+  position: absolute;
+  right: -11px;
+  top: -9px;
 }
 
 .hole {
   display: inline-block;
   vertical-align: top;
+  cursor: pointer;
+  margin: 0 -1px;
+  position: relative;
+  z-index: 1;
+}
+.summary {
+  z-index: 0;
+}
+.hole > div {
+  border: 1px solid transparent;
+}
+.hole-data {
+  border-radius: 3px 3px 0 0;
+}
+.hole-data:hover {
+  border-color: #DDD;
+}
+.hole-summary > div > div {
+  background-color: rgba(105, 192, 245, 0.16);
+}
+.hole-summary .hole-map {
+  background-color: transparent;
 }
 
 .over-under {
   background-position: center center;
   background-repeat: no-repeat;
   background-size: 30px;
+}
+.over-under.inline {
+  display: inline-block;
+  font-size: 12px;
+  min-width: 30px;
+  min-height: 30px;
+  text-align: center;
+  padding-top: 18px;
+  text-align: center;
+  vertical-align: middle;
+  margin-left: 10px;
 }
 .over-under--2 {
   background-image: url('../images/icons/eagle.png');
@@ -72,23 +181,69 @@ img {
 }
 
 .hole-map {
-  height: 125px;
   width: 40px;
+  height: 56px;
   display: inline-block;
-  background-size: 80px; 
-  background-repeat: no-repeat;
-  background-position: center;
   position: relative;
+  margin-top: 10px;
 }
 
+.hole-options {
+  position: absolute;
+  top: 0;
+  left: 5px;
+}
+
+.hole-focus .hole-map {
+  /*height: 125px;*/
+  width: 140px;
+  background-size: 140px;
+}
+.hole-map-wrapper {
+  position: relative;
+}
+.hole-info {
+  margin-left: 10px;
+  width: 220px;
+}
+
+.table-wrapper {
+  margin: 10px;
+}
+
+.edit, .save {
+  position: absolute;
+  bottom: 0;
+}
+.edit {
+  left: 20px;
+}
+.save {
+  right: 20px;
+}
+.hole-number {
+  font-size: 46px;
+}
+
+.hole-focus table td:last-child {
+  text-align: right;
+}
 
 .info > div {
   font-size: 12px;
-  padding: 11px 0;
+  padding: 11px 3px;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: -1px;
+}
+.hole-summary .info > div:first-child {
+  background-color: transparent;
 }
 
 .first {
   text-align: left;
+}
+.center {
+  text-align: center;
 }
 .top {
   vertical-align: top;
@@ -114,6 +269,19 @@ img {
 
 .hidden {
   display: none;
+}
+
+.btn {
+  cursor: pointer;
+  color: #6192F3;
+  border-radius: 3px;
+  border: 1px solid #6192F3;
+  padding: 3px 10px;
+  text-transform: uppercase;
+  background-color: #FFF;
+}
+.btn:hover {
+  background-color: #F5F8FF;
 }
 
 

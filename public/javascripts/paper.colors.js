@@ -1,0 +1,1 @@
+module.exports = ['#26C9FF', '#FFB237'];

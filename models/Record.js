@@ -7,6 +7,8 @@ var connectionCalled = false;
 var schema;
 var tableSchemas;
 
+_.mixin(require('../services/lodash.mixin'));
+
 record.connect = function() {
   record.db = mysql.createConnection({
     host     : process.env.DB_HOST ||'localhost',
@@ -93,6 +95,18 @@ record.staticMethods = {
       return el.trim();
     }));
   },
+  order: function(keys) {
+    var orders;
+    if (typeof keys === 'object') {
+      orders = keys;
+    } else {
+      orders = keys.split(/,/g);
+    }
+
+    this.queryParams.order = this.queryParams.order.concat(orders.map(function(el) {
+      return el.trim();
+    }));
+  },
   where: function(condition) {
     for (var key in condition) {
       this.queryParams.where[key] = condition[key];
@@ -117,13 +131,21 @@ record.staticMethods = {
     if (_.size(this.queryParams.joins)) {
       q += ' ' + this.queryParams.joins.join(' ');
     }
-    if (_.size(this.queryParams.where)) {
+    if (_.size(this.queryParams.where) === 1) {
       params.push(this.queryParams.where);
       q += ' WHERE ?';
+    } else if (_.size(this.queryParams.where) > 1) {
+      q += ' WHERE ' + _.map(this.queryParams.where, function(value, key) {
+        return _this._formatWhere(key, value);
+      }).join(' AND ');
     }
     if (_.size(this.queryParams.group)) {
       params.push(this.queryParams.group);
-      q += ' GROUP BY ?';
+      q += ' GROUP BY ??';
+    }
+    if (_.size(this.queryParams.order)) {
+      params.push(this.queryParams.order);
+      q += ' ORDER BY ??';
     }
     if (this.queryParams.limit) {
       params.push(this.queryParams.limit);
@@ -139,6 +161,13 @@ record.staticMethods = {
       if (cbFn)
         cbFn(_this._instantiateResponse.call(_this, data));
     });
+  },
+  _formatWhere: function(key, value) {
+    if (value.length > 0) {
+      return record.db.escapeId(key) + ' IN (' + record.db.escape(value) + ')';
+    } else {
+      return record.db.escapeId(key) + ' = ' + record.db.escape(value);
+    }
   },
   _instantiateResponse: function(data) {
     var _this = this;
@@ -238,6 +267,7 @@ record.createModel = function(options) {
         select: [],
         joins: [],
         group: [],
+        order: [],
         limit: null
       }
     });
