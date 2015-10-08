@@ -11,21 +11,7 @@ module.exports = {
     Course.all().then(callback);
   },
   rounds: function(callback) {
-    Round
-      .select([
-        "*",
-        "rounds.id AS 'id'",
-        "DATE_FORMAT(date, '%b %d, %Y') AS 'date_str'",
-        "SUM(score) AS 'total_score'",
-        "SUM(par) AS 'total_par'",
-        "SUM(pros) AS 'pros_dist'",
-        "SUM(tips) AS 'tips_dist'"])
-      .joins("INNER JOIN courses ON courses.id = rounds.course_id "+
-        "LEFT JOIN scores ON scores.round_id = rounds.id "+
-        "LEFT JOIN holes ON holes.id = scores.hole_id")
-      .group('rounds.id')
-      .order('date_str')
-      .then(function(data) {
+    Round.groupTotals().then(function(data) {
         var counts = {};
         data = data.reverse().map(function(round) {
           counts[round.course_id] = counts[round.course_id] || 1;
@@ -46,17 +32,73 @@ module.exports = {
       });
     });
   },
+  stats: function(options, callback) {
+    Shot
+      .select([
+        "*",
+        "shots.number AS 'shot_number'",
+        "holes.number AS 'hole_number'",
+        "scores.id AS 'score_id'"])
+      .withScoresAndHoles()
+      .where(options)
+      .then(function(data) {
+        var holes = _(data)
+          .groupBy('score_id')
+          .map(function(shots, scoreId) {
+            return shots[0];
+          })
+          .value();
+        var drives = _(data)
+          .filter(function(el) {
+            return el.shot_number < 2 && el.fir === 1 && el.par > 3;
+          })
+          .groupBy('score_id')
+          .map(function(shots, id) {
+            return {
+              hole: shots[0].hole_number,
+              shot_distance: Math.round(Math.sqrt(Math.pow(shots[1].x - shots[0].x, 2) + Math.pow(shots[1].y - shots[0].y, 2)) * shots[0].scale_factor)
+            };
+          });
+        var greensInReg = holes
+          .filter(function(el) {
+            return el.gir === 1;
+          }).length / holes.length;
+        var missedGreens = holes.filter(function(el) {
+            return el.gir === 0;
+          });
+        var parSaves = missedGreens.filter(function(el) {
+            return el.score <= el.par;
+          }).length / missedGreens.length;
+
+        var eagles = holes.filter(function(el) { return el.score === el.par - 2; }).length;
+        var birdies = holes.filter(function(el) { return el.score === el.par - 1; }).length;
+        var pars = holes.filter(function(el) { return el.score === el.par; }).length;
+        var bogies = holes.filter(function(el) { return el.score === el.par + 1; }).length;
+        var dblPlus = holes.filter(function(el) { return el.score > el.par + 1; }).length;
+
+        callback({
+          drives: drives,
+          gir: greensInReg,
+          parSaves: parSaves,
+          scores: [eagles, birdies, pars, bogies, dblPlus]
+        });
+      });
+  },
   scores: function(options, callback) {
-    Score.select(["*",
-        "scores.id AS 'score_id'",
-        "score - par AS 'over_under'"]).joins("INNER JOIN holes ON holes.id = scores.hole_id").where({
-      'scores.round_id': options.round_id
-    }).then(callback);
+    Score.select([
+      "*",
+      "scores.id AS 'score_id'",
+      "score - par AS 'over_under'"])
+    .joins("INNER JOIN holes ON holes.id = scores.hole_id")
+    .where({
+      'scores.round_id': options.round_id})
+    .then(callback);
   },
   shots: function(options, callback) {
     Shot
       .select(["shots.*"])
-      .joins("INNER JOIN scores ON scores.id = shots.score_id INNER JOIN rounds ON rounds.id = scores.round_id")
+      .withScores()
+      .joins("INNER JOIN rounds ON rounds.id = scores.round_id")
       .where(options)
       .then(function(shots) {
         callback(_.groupBy(shots, 'score_id'));

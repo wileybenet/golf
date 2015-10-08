@@ -41,18 +41,6 @@ module.exports = React.createClass({
       };
     }
 
-    var summary = {
-      saves: this.props.data.filter(function(el) {
-        return !el.gir && (el.par >= el.score);
-      }).length,
-      totalMisses: this.props.data.filter(function(el) {
-        return !el.gir;
-      }).length,
-      pars: this.props.data.filter(function(el) {
-        return el.par === el.score;
-      }).length
-    };
-
     var headers = {
       align: 'left',
       number: 'Hole',
@@ -110,10 +98,6 @@ module.exports = React.createClass({
     return (
       <div>
         {holeNodes}
-        <div>
-          Par Saves: {summary.saves}/{summary.totalMisses}<br />
-          Pars: {summary.pars}
-        </div>
       </div>
     );
   }

@@ -8,6 +8,8 @@ var emitter = require('./modules/emitter');
 var HoleList = require('./modules/HoleList'); 
 var HoleModal = require('./modules/HoleModal');
 var RoundModal = require('./modules/RoundModal');
+var Summary = require('./modules/Summary');
+var CloseButton = require('./modules/CloseButton');
 
 var App = React.createClass({
   componentDidMount: function() {
@@ -31,10 +33,10 @@ var App = React.createClass({
   render: function() {
     return (
       <div className="app">
-        <div className="top">
+        <div className="content-block">
           <Rounds />
         </div>
-        <div className="top">
+        <div className="content-block">
           { this.state.round.id ? <Scorecard round={this.state.round} /> : null }
         </div>
         { this.state.modal === 'hole' ? <HoleModal data={this.state.modalData} close={this.closeModal} /> : null }
@@ -56,7 +58,7 @@ var Rounds = React.createClass({
   render: function() {
     return (
       <div>
-        <Summary data={this.state.data} />
+        <Summary rounds={this.state.data} options={{}} />
         <RoundList data={this.state.data} />
       </div>
     );
@@ -130,32 +132,10 @@ var Round = React.createClass({
   }
 });
 
-var Summary = React.createClass({
-  render: function() {
-    function getHandicap(round) {
-      var rating = round[round.tees + '_rating'];
-      var slope = round[round.tees + '_slope'];
-
-      return {
-        handicap: ((round.total_score - rating) * 113 / slope).toFixed(1)
-      };
-    }
-
-    var handicaps = this.props.data.map(getHandicap);
-    var handicap = utils.sum(handicaps, 'handicap') / handicaps.length;
-    var handicapIndex;
-    (handicap * 0.96).toFixed(10).replace(/^[^.]+\../, function(match) {
-      handicapIndex = match;
-    });
-    return (
-      <div className="handicap-summary">
-        <div>Handicap {handicapIndex}</div>
-      </div>
-    );
-  }
-});
-
 var Scorecard = React.createClass({
+  close: function() {
+    emitter.emit('round.select', {});
+  },
   componentDidMount: function() {
     this.loadScores(this.props);
   },
@@ -171,8 +151,15 @@ var Scorecard = React.createClass({
     return { data: [] };
   },
   render: function() {
+    var options = {
+      round_id: this.props.round.id
+    };
     return (
-      <HoleList round={this.props.round} data={this.state.data} />
+      <div>
+        <CloseButton action={this.close} />
+        <HoleList round={this.props.round} data={this.state.data} />
+        <Summary rounds={[this.props.round]} options={options} />
+      </div>
     );
   }
 });

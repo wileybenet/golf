@@ -53,7 +53,9 @@
 
 	var HoleList = __webpack_require__(23); 
 	var HoleModal = __webpack_require__(25);
-	var RoundModal = __webpack_require__(29);
+	var RoundModal = __webpack_require__(30);
+	var Summary = __webpack_require__(33);
+	var CloseButton = __webpack_require__(28);
 
 	var App = React.createClass({displayName: "App",
 	  componentDidMount: function() {
@@ -77,10 +79,10 @@
 	  render: function() {
 	    return (
 	      React.createElement("div", {className: "app"}, 
-	        React.createElement("div", {className: "top"}, 
+	        React.createElement("div", {className: "content-block"}, 
 	          React.createElement(Rounds, null)
 	        ), 
-	        React.createElement("div", {className: "top"}, 
+	        React.createElement("div", {className: "content-block"}, 
 	           this.state.round.id ? React.createElement(Scorecard, {round: this.state.round}) : null
 	        ), 
 	         this.state.modal === 'hole' ? React.createElement(HoleModal, {data: this.state.modalData, close: this.closeModal}) : null, 
@@ -102,7 +104,7 @@
 	  render: function() {
 	    return (
 	      React.createElement("div", null, 
-	        React.createElement(Summary, {data: this.state.data}), 
+	        React.createElement(Summary, {rounds: this.state.data, options: {}}), 
 	        React.createElement(RoundList, {data: this.state.data})
 	      )
 	    );
@@ -176,32 +178,10 @@
 	  }
 	});
 
-	var Summary = React.createClass({displayName: "Summary",
-	  render: function() {
-	    function getHandicap(round) {
-	      var rating = round[round.tees + '_rating'];
-	      var slope = round[round.tees + '_slope'];
-
-	      return {
-	        handicap: ((round.total_score - rating) * 113 / slope).toFixed(1)
-	      };
-	    }
-
-	    var handicaps = this.props.data.map(getHandicap);
-	    var handicap = utils.sum(handicaps, 'handicap') / handicaps.length;
-	    var handicapIndex;
-	    (handicap * 0.96).toFixed(10).replace(/^[^.]+\../, function(match) {
-	      handicapIndex = match;
-	    });
-	    return (
-	      React.createElement("div", {className: "handicap-summary"}, 
-	        React.createElement("div", null, "Handicap ", handicapIndex)
-	      )
-	    );
-	  }
-	});
-
 	var Scorecard = React.createClass({displayName: "Scorecard",
+	  close: function() {
+	    emitter.emit('round.select', {});
+	  },
 	  componentDidMount: function() {
 	    this.loadScores(this.props);
 	  },
@@ -217,8 +197,15 @@
 	    return { data: [] };
 	  },
 	  render: function() {
+	    var options = {
+	      round_id: this.props.round.id
+	    };
 	    return (
-	      React.createElement(HoleList, {round: this.props.round, data: this.state.data})
+	      React.createElement("div", null, 
+	        React.createElement(CloseButton, {action: this.close}), 
+	        React.createElement(HoleList, {round: this.props.round, data: this.state.data}), 
+	        React.createElement(Summary, {rounds: [this.props.round], options: options})
+	      )
 	    );
 	  }
 	});
@@ -624,7 +611,7 @@
 
 
 	// module
-	exports.push([module.id, "body {\n  padding: 50px;\n  font-family: sans-serif;\n}\n\na {\n  color: #00B7FF;\n}\n\nh1, h2, h3 {\n  letter-spacing: 3px;\n  font-weight: normal;\n}\n\nimg {\n  margin: 0;\n  padding: 0;\n}\ninput[type=text] {\n  width: 40px;\n  border-radius: 3px;\n  border: 1px solid #DDD;\n  display: block;\n}\n\n.modal {\n  position: fixed;\n  top: 0;\n  left: 0;\n  background-color: rgba(255, 255, 255, 0.9);\n  z-index: 100;\n  width: 100%;\n  height: 100%;\n}\n\n.modal .dialog {\n  position: absolute;\n  top: 60px;\n  left: 50%;\n  margin-left: -260px;\n  width: 490px;\n  background-color: #FFF;\n  border: 1px solid #DDD;\n  border-radius: 3px;\n  padding: 15px;\n  font-size: 14px;\n}\n.modal .dialog.wide {\n  margin-left: -460px;\n  width: 890px;\n}\n.modal-submit {\n  margin: 40px 0 0 0;\n}\n.left-slide, .right-slide {\n  position: absolute;\n  top: 150px;\n  font-size: 54px;\n  cursor: pointer;\n}\n.left-slide {\n  left: -70px;\n}\n.left-slide i {\n  padding-right: 15px;\n}\n.right-slide {\n  right: -70px;\n}\n.right-slide i {\n  padding-left: 15px;\n}\n\n.handicap-summary {\n  position: relative;\n  margin-bottom: 20px;\n}\n\n.round-actions {\n  margin: 0 0 15px 0;\n}\n.round-list {\n  width: 240px;\n  display: inline-block;\n}\n.round {\n  width: 220px;\n  margin: 20px 0;\n  cursor: pointer;\n  position: relative;\n  border-right: 1px solid transparent;\n}\n.round:hover {\n\n}\n.round.selected {\n  border-right-color: #CCC;\n}\n.round-info {\n  margin-left: 10px;\n}\n\n.arrow-left {\n  width: 1px;\n  height: 0;\n  border: 9px solid transparent;\n  border-left: 0;\n  border-right-color: #CCC;\n  position: absolute;\n  right: -1px;\n  top: 29px;\n}\n.arrow-left div {\n  width: 1px;\n  height: 0;\n  border: 9px solid transparent;\n  border-left: 0;\n  border-right-color: #FFF;\n  position: absolute;\n  right: -11px;\n  top: -9px;\n}\n\n.hole {\n  display: inline-block;\n  vertical-align: top;\n  cursor: pointer;\n  margin: 0 -1px;\n  position: relative;\n  z-index: 1;\n}\n.summary {\n  z-index: 0;\n}\n.hole > div {\n  border: 1px solid transparent;\n}\n.hole-data {\n  border-radius: 3px 3px 0 0;\n}\n.hole-data:hover {\n  border-color: #DDD;\n}\n.hole-summary > div > div {\n  background-color: rgba(105, 192, 245, 0.16);\n}\n.hole-summary .hole-map {\n  background-color: transparent;\n}\n\n.over-under {\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: 30px;\n}\n.over-under.inline {\n  display: inline-block;\n  font-size: 12px;\n  min-width: 30px;\n  min-height: 30px;\n  text-align: center;\n  padding-top: 18px;\n  text-align: center;\n  vertical-align: middle;\n  margin-left: 10px;\n}\n.over-under--2 {\n  background-image: url(" + __webpack_require__(13) + ");\n}\n.over-under--1 {\n  background-image: url(" + __webpack_require__(14) + ");\n}\n.over-under-1 {\n  background-image: url(" + __webpack_require__(15) + ");\n}\n.over-under-2 {\n  background-image: url(" + __webpack_require__(16) + ");\n}\n.over-under-3 {\n  background-image: url(" + __webpack_require__(17) + ");\n}\n\n.hole-map {\n  width: 40px;\n  height: 56px;\n  display: inline-block;\n  position: relative;\n  margin-top: 10px;\n}\n\n.hole-options {\n  position: absolute;\n  top: 0;\n  left: 5px;\n}\n\n.hole-focus .hole-map {\n  /*height: 125px;*/\n  width: 140px;\n  background-size: 140px;\n}\n.hole-map-wrapper {\n  position: relative;\n}\n.hole-info {\n  margin-left: 10px;\n  width: 220px;\n}\n\n.table-wrapper {\n  margin: 10px;\n}\n\n.edit, .save {\n  position: absolute;\n  bottom: 0;\n}\n.edit {\n  left: 20px;\n}\n.save {\n  right: 20px;\n}\n.hole-number {\n  font-size: 46px;\n}\n\n.hole-focus table td:last-child {\n  text-align: right;\n}\n\n.info > div {\n  font-size: 12px;\n  padding: 11px 3px;\n  border-bottom: 1px solid #CCC;\n  margin-bottom: -1px;\n}\n.hole-summary .info > div:first-child {\n  background-color: transparent;\n}\n\n.first {\n  text-align: left;\n}\n.center {\n  text-align: center;\n}\n.top {\n  vertical-align: top;\n  display: inline-block;\n}\n.middle {\n  vertical-align: middle;\n  display: inline-block;\n}\n\n.green {\n  background-color: #E7F5E7;\n}\n.red {\n  background-color: #FDECEC;\n}\n.small {\n  font-size: 12px;\n}\n.caps {\n  text-transform: capitalize;\n}\n\n.hidden {\n  display: none;\n}\n\n.btn {\n  cursor: pointer;\n  color: #6192F3;\n  border-radius: 3px;\n  border: 1px solid #6192F3;\n  padding: 3px 10px;\n  text-transform: uppercase;\n  background-color: #FFF;\n}\n.btn:hover {\n  background-color: #F5F8FF;\n}\n\n\n\n\n", ""]);
+	exports.push([module.id, "body {\n  padding: 50px;\n  font-family: sans-serif;\n}\n\na {\n  color: #00B7FF;\n}\n\nh1, h2, h3 {\n  letter-spacing: 3px;\n  font-weight: normal;\n}\n\nimg {\n  margin: 0;\n  padding: 0;\n}\ninput[type=text] {\n  width: 40px;\n  border-radius: 3px;\n  border: 1px solid #DDD;\n  display: block;\n}\n\n.modal {\n  position: fixed;\n  top: 0;\n  left: 0;\n  background-color: rgba(255, 255, 255, 0.9);\n  z-index: 100;\n  width: 100%;\n  height: 100%;\n}\n\n.modal .dialog {\n  position: absolute;\n  top: 60px;\n  left: 50%;\n  margin-left: -260px;\n  width: 490px;\n  background-color: #FFF;\n  border: 1px solid #DDD;\n  border-radius: 3px;\n  padding: 15px;\n  font-size: 14px;\n}\n.modal .dialog.wide {\n  margin-left: -460px;\n  width: 890px;\n}\n.modal-submit {\n  margin: 40px 0 0 0;\n}\n.left-slide, .right-slide {\n  position: absolute;\n  top: 150px;\n  font-size: 54px;\n  cursor: pointer;\n}\n.left-slide {\n  left: -70px;\n}\n.left-slide i {\n  padding-right: 15px;\n}\n.right-slide {\n  right: -70px;\n}\n.right-slide i {\n  padding-left: 15px;\n}\n\n.handicap-summary {\n  position: relative;\n  margin-bottom: 20px;\n  width: 100%;\n}\n\n.round-actions {\n  margin: 0 0 15px 0;\n}\n.round-list {\n  width: 240px;\n  display: inline-block;\n}\n.round {\n  width: 220px;\n  margin: 20px 0;\n  cursor: pointer;\n  position: relative;\n  border-right: 1px solid transparent;\n}\n.round:hover {\n\n}\n.round.selected {\n  border-right-color: #CCC;\n}\n.round-info {\n  margin-left: 10px;\n}\n\n.arrow-left {\n  width: 1px;\n  height: 0;\n  border: 9px solid transparent;\n  border-left: 0;\n  border-right-color: #CCC;\n  position: absolute;\n  right: -1px;\n  top: 29px;\n}\n.arrow-left div {\n  width: 1px;\n  height: 0;\n  border: 9px solid transparent;\n  border-left: 0;\n  border-right-color: #FFF;\n  position: absolute;\n  right: -11px;\n  top: -9px;\n}\n\n.hole {\n  display: inline-block;\n  vertical-align: top;\n  cursor: pointer;\n  margin: 0 -1px;\n  position: relative;\n  z-index: 1;\n}\n.summary {\n  z-index: 0;\n}\n.hole > div {\n  border: 1px solid transparent;\n}\n.hole-data {\n  border-radius: 3px 3px 0 0;\n}\n.hole-data:hover {\n  border-color: #DDD;\n}\n.hole-summary > div > div {\n  background-color: rgba(105, 192, 245, 0.16);\n}\n.hole-summary .hole-map {\n  background-color: transparent;\n}\n\n.over-under {\n  background-position: center center;\n  background-repeat: no-repeat;\n  background-size: 30px;\n}\n.over-under.inline {\n  display: inline-block;\n  font-size: 12px;\n  min-width: 30px;\n  min-height: 30px;\n  text-align: center;\n  padding-top: 18px;\n  text-align: center;\n  vertical-align: middle;\n  margin-left: 10px;\n}\n.over-under.tiny {\n  background-size: 20px;\n  display: inline-block;\n  width: 21px;\n  text-align: center;\n  font-size: 10px;\n  height: 16px;\n  padding-top: 3px;\n}\n.over-under--2 {\n  background-image: url(" + __webpack_require__(13) + ");\n}\n.over-under--1 {\n  background-image: url(" + __webpack_require__(14) + ");\n}\n.over-under-1 {\n  background-image: url(" + __webpack_require__(15) + ");\n}\n.over-under-2 {\n  background-image: url(" + __webpack_require__(16) + ");\n}\n.over-under-3 {\n  background-image: url(" + __webpack_require__(17) + ");\n}\n\n.hole-map {\n  width: 40px;\n  height: 56px;\n  display: inline-block;\n  position: relative;\n  margin-top: 10px;\n}\n\n.hole-options {\n  position: absolute;\n  top: 0;\n  right: 0;\n  text-align: right;\n}\n.hole-options label {\n  margin-right: 5px;\n}\n\n.hole-focus .hole-map {\n  /*height: 125px;*/\n  width: 140px;\n  background-size: 140px;\n}\n.hole-map-wrapper {\n  position: relative;\n}\n.hole-info {\n  margin-left: 10px;\n  width: 220px;\n}\n\n.table-wrapper {\n  margin: 10px;\n}\n\n.edit, .save {\n  position: absolute;\n  bottom: 0;\n}\n.edit {\n  left: 20px;\n}\n.save {\n  right: 20px;\n}\n.hole-number {\n  font-size: 46px;\n}\n\n.hole-focus table td:last-child {\n  text-align: right;\n}\n\n.info > div {\n  font-size: 12px;\n  padding: 11px 3px;\n  border-bottom: 1px solid #CCC;\n  margin-bottom: -1px;\n}\n.hole-summary .info > div:first-child {\n  background-color: transparent;\n}\n\n.first {\n  text-align: left;\n}\n.center {\n  text-align: center;\n}\n.right {\n  text-align: right;\n}\n.top {\n  vertical-align: top;\n  display: inline-block;\n}\n.content-block {\n  vertical-align: top;\n  display: inline-block;\n  margin-right: 30px;\n  position: relative;\n}\n.middle {\n  vertical-align: middle;\n  display: inline-block;\n}\n\n.green {\n  background-color: #E7F5E7;\n}\n.red {\n  background-color: #FDECEC;\n}\n.small {\n  font-size: 12px;\n}\n.caps {\n  text-transform: capitalize;\n}\n\n.close {\n  position: absolute;\n  top: -10px;\n  right: -30px;\n  font-size: 30px;\n  color: #CCC;\n  cursor: pointer;\n}\n.close:hover {\n  color: #6192F3;\n}\n\n.hidden {\n  display: none;\n}\n\n.btn {\n  cursor: pointer;\n  color: #6192F3;\n  border-radius: 3px;\n  border: 1px solid #6192F3;\n  padding: 3px 10px;\n  text-transform: uppercase;\n  background-color: #FFF;\n}\n.btn:hover {\n  background-color: #F5F8FF;\n}\n\n\n\n\n", ""]);
 
 	// exports
 
@@ -703,6 +690,7 @@
 	    comet.api.courses = comet.$get.bind(null, '/comet/api/courses');
 	    comet.api.rounds = comet.$get.bind(null, '/comet/api/rounds');
 	    comet.api.saveRound = comet.$post.bind(null, '/comet/api/save_round');
+	    comet.api.stats = comet.$post.bind(null, '/comet/api/stats');
 	    comet.api.scores = comet.$post.bind(null, '/comet/api/scores');
 	    comet.api.shots = comet.$post.bind(null, '/comet/api/shots');
 	    comet.api.holes = comet.$post.bind(null, '/comet/api/holes');
@@ -714,13 +702,18 @@
 /***/ function(module, exports) {
 
 	
-	module.exports = {
+	var utils= {
 	  sum: function(arr, prop) {
 	    return arr.reduce(function(memo, el) {
 	      return memo + el[prop];
 	    }, 0);
+	  },
+	  average: function(arr, prop) {
+	    return utils.sum(arr, prop) / arr.length;
 	  }
 	};
+
+	module.exports = utils;
 
 /***/ },
 /* 22 */
@@ -802,18 +795,6 @@
 	      };
 	    }
 
-	    var summary = {
-	      saves: this.props.data.filter(function(el) {
-	        return !el.gir && (el.par >= el.score);
-	      }).length,
-	      totalMisses: this.props.data.filter(function(el) {
-	        return !el.gir;
-	      }).length,
-	      pars: this.props.data.filter(function(el) {
-	        return el.par === el.score;
-	      }).length
-	    };
-
 	    var headers = {
 	      align: 'left',
 	      number: 'Hole',
@@ -870,11 +851,7 @@
 
 	    return (
 	      React.createElement("div", null, 
-	        holeNodes, 
-	        React.createElement("div", null, 
-	          "Par Saves: ", summary.saves, "/", summary.totalMisses, React.createElement("br", null), 
-	          "Pars: ", summary.pars
-	        )
+	        holeNodes
 	      )
 	    );
 	  }
@@ -943,7 +920,8 @@
 	var paperColors = __webpack_require__(27);
 	var comet = __webpack_require__(19);
 	var emitter = __webpack_require__(22);
-	var $ = __webpack_require__(28);
+	var CloseButton = __webpack_require__(28);
+	var $ = __webpack_require__(29);
 
 	module.exports = React.createClass({displayName: "module.exports",
 	  edit: function() {
@@ -1018,7 +996,7 @@
 	          var text = new this._scope.PointText(new this._scope.Point(offset, shot.y + 3));
 	          text.fillColor = 'black';
 	          text.justification = (roundIdx % 2) ? 'right' : 'left';
-	          text.content = (pointA.getDistance(pointB) * this.props.data.hole.scale_factor * 2).toFixed(0) + ' yds';
+	          text.content = (pointA.getDistance(pointB) * this.props.data.hole.scale_factor).toFixed(0) + ' yds';
 	          paths.push(text);
 
 	          var context = new this._scope.Path({
@@ -1156,13 +1134,14 @@
 	    return (
 	      React.createElement("div", {className: "modal", onClick: this.props.close}, 
 	        React.createElement("div", {className: "dialog", onClick: this.prevent}, 
+	          React.createElement(CloseButton, {action: this.props.close}), 
 	          React.createElement("div", {className: "left-slide"}, React.createElement("i", {className: "fa fa-angle-left btn", onClick: this.prevHole})), 
 	          React.createElement("div", {className: "right-slide"}, React.createElement("i", {className: "fa fa-angle-right btn", onClick: this.nextHole})), 
 	          React.createElement("div", {className: "hole-focus"}, 
-	            React.createElement("table", {className: "hole-info top"}, 
+	            React.createElement("table", {className: "hole-info top small"}, 
 	              React.createElement("tr", null, 
 	                React.createElement("td", {colSpan: "2"}, 
-	                  React.createElement("div", {className: "small"}, this.props.data.round.name, " round ", this.props.data.round.round_number)
+	                  React.createElement("div", null, this.props.data.round.name, " round ", this.props.data.round.round_number)
 	                ), 
 	                React.createElement("td", null)
 	              ), 
@@ -1176,27 +1155,27 @@
 	                React.createElement("td", null)
 	              ), 
 	              React.createElement("tr", null, 
-	                React.createElement("td", {className: "small"}, "Distance"), 
+	                React.createElement("td", null, "Distance"), 
 	                React.createElement("td", null, this.props.data.hole[this.props.data.round.tees], " yds")
 	              ), 
 	              React.createElement("tr", null, 
-	                React.createElement("td", {className: "small"}, "Par"), 
+	                React.createElement("td", null, "Par"), 
 	                React.createElement("td", null, this.props.data.hole.par)
 	              ), 
 	              React.createElement("tr", null, 
-	                React.createElement("td", {className: "small"}, "Score"), 
+	                React.createElement("td", null, "Score"), 
 	                React.createElement("td", null, overUnder[this.props.data.hole.over_under + 3])
 	              ), 
 	              React.createElement("tr", null, 
-	                React.createElement("td", {className: "small"}, "Fairway in regulation"), 
+	                React.createElement("td", null, "Fairway in regulation"), 
 	                React.createElement("td", null, React.createElement("span", {dangerouslySetInnerHTML: {__html: fir}}))
 	              ), 
 	              React.createElement("tr", null, 
-	                React.createElement("td", {className: "small"}, "Green in regulation"), 
+	                React.createElement("td", null, "Green in regulation"), 
 	                React.createElement("td", null, React.createElement("span", {dangerouslySetInnerHTML: {__html: gir}}))
 	              ), 
 	              React.createElement("tr", null, 
-	                React.createElement("td", {className: "small"}, "Putts"), 
+	                React.createElement("td", null, "Putts"), 
 	                React.createElement("td", null, this.props.data.hole.putts)
 	              )
 	            ), 
@@ -1207,20 +1186,20 @@
 	               this.state.editing ? React.createElement("div", {className: "btn edit small", onClick: this.cancel}, "cancel") : null, 
 	              React.createElement("div", {className: "hole-options small"}, 
 	                React.createElement("div", null, 
-	                  React.createElement("input", {name: "view", id: "current-hole", type: "radio", value: "CURRENT_HOLE", onChange: this.updateView, checked: this.state.view === 'CURRENT_HOLE'}), 
-	                  React.createElement("label", {htmlFor: "current-hole"}, "Current")
+	                  React.createElement("label", {htmlFor: "current-hole"}, "Current"), 
+	                  React.createElement("input", {name: "view", id: "current-hole", type: "radio", value: "CURRENT_HOLE", onChange: this.updateView, checked: this.state.view === 'CURRENT_HOLE'})
 	                ), 
 	                React.createElement("div", null, 
-	                  React.createElement("input", {name: "view", id: "drives", type: "radio", value: "DRIVES", onChange: this.updateView, checked: this.state.view === 'DRIVES'}), 
-	                  React.createElement("label", {htmlFor: "drives"}, "Drives")
+	                  React.createElement("label", {htmlFor: "drives"}, "Drives"), 
+	                  React.createElement("input", {name: "view", id: "drives", type: "radio", value: "DRIVES", onChange: this.updateView, checked: this.state.view === 'DRIVES'})
 	                ), 
 	                React.createElement("div", null, 
-	                  React.createElement("input", {name: "view", id: "nd-shot", type: "radio", value: "2ND_SHOT", onChange: this.updateView, checked: this.state.view === '2ND_SHOT'}), 
-	                  React.createElement("label", {htmlFor: "nd-shot"}, "2nd Shot")
+	                  React.createElement("label", {htmlFor: "nd-shot"}, "2nd Shot"), 
+	                  React.createElement("input", {name: "view", id: "nd-shot", type: "radio", value: "2ND_SHOT", onChange: this.updateView, checked: this.state.view === '2ND_SHOT'})
 	                ), 
 	                React.createElement("div", null, 
-	                  React.createElement("input", {name: "view", id: "all-holes", type: "radio", value: "ALL_HOLES", onChange: this.updateView, checked: this.state.view === 'ALL_HOLES'}), 
-	                  React.createElement("label", {htmlFor: "all-holes"}, "All")
+	                  React.createElement("label", {htmlFor: "all-holes"}, "All"), 
+	                  React.createElement("input", {name: "view", id: "all-holes", type: "radio", value: "ALL_HOLES", onChange: this.updateView, checked: this.state.view === 'ALL_HOLES'})
 	                )
 	              )
 	            )
@@ -1245,16 +1224,32 @@
 
 /***/ },
 /* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */var React = __webpack_require__(18);
+
+	module.exports = React.createClass({displayName: "module.exports",
+	  render: function() {
+	    return (
+	      React.createElement("div", {className: "close", onClick: this.props.action}, 
+	        "×"
+	      )
+	    );
+	  }
+	});
+
+/***/ },
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = $;
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/** @jsx React.DOM */var React = __webpack_require__(18);
-	var _ = __webpack_require__(30);
+	var _ = __webpack_require__(31);
 	var comet = __webpack_require__(19);
 	var emitter = __webpack_require__(22);
 
@@ -1352,7 +1347,7 @@
 	});
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module, global) {/**
@@ -13707,10 +13702,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(31)(module), (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(32)(module), (function() { return this; }())))
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -13724,6 +13719,72 @@
 		return module;
 	}
 
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/** @jsx React.DOM */var comet = __webpack_require__(19);
+	var React = __webpack_require__(18);
+	var utils = __webpack_require__(21);
+
+	module.exports = React.createClass({displayName: "module.exports",
+	  getStats: function(props) {    
+	    comet.api.stats(props.options, function(data) {
+	      this.setState({
+	        averageDrive: utils.average(data.drives, 'shot_distance'),
+	        gir: (data.gir * 100).toFixed(1),
+	        parSaves: (data.parSaves * 100).toFixed(1),
+	        scores: data.scores
+	      });
+	    }.bind(this));
+	  },
+	  componentDidMount: function() {
+	    this.getStats(this.props);
+	  },
+	  componentWillReceiveProps: function(props) {
+	    this.getStats(props);
+	  },
+	  getInitialState: function() {
+	    return {
+	      scores: []
+	    };
+	  },
+	  render: function() {
+	    function getHandicap(round) {
+	      var rating = round[round.tees + '_rating'];
+	      var slope = round[round.tees + '_slope'];
+
+	      return {
+	        handicap: Math.round((round.total_score - rating) * 113 / slope * 10) / 10
+	      };
+	    }
+
+	    var handicaps = this.props.rounds.map(getHandicap);
+	    var handicap = utils.average(handicaps, 'handicap');
+	    var handicapIndex;
+	    (handicap * 0.96).toFixed(10).replace(/^[^.]+\../, function(match) {
+	      handicapIndex = match;
+	    });
+
+	    var scores = this.state.scores.map(function(scoreCount, idx) {
+	      var score = idx - 2;
+	      var overUnder = 'over-under tiny over-under-' + score;
+	      return (
+	        React.createElement("div", {className: overUnder}, scoreCount)
+	      );
+	    });
+	    return (
+	      React.createElement("table", {className: "handicap-summary small"}, 
+	        React.createElement("tr", null, React.createElement("td", null, "Handicap"), React.createElement("td", {className: "right"}, handicapIndex)), 
+	        React.createElement("tr", null, React.createElement("td", null, "Average Drive"), React.createElement("td", {className: "right"}, this.state.averageDrive, " yds")), 
+	        React.createElement("tr", null, React.createElement("td", null, "Greens In Regulation"), React.createElement("td", {className: "right"}, this.state.gir, "%")), 
+	        React.createElement("tr", null, React.createElement("td", null, "Par Saves"), React.createElement("td", {className: "right"}, this.state.parSaves, "%")), 
+	        React.createElement("tr", null, React.createElement("td", null, "Scores"), React.createElement("td", {className: "right"}, scores))
+	      )
+	    );
+	  }
+	});
 
 /***/ }
 /******/ ]);

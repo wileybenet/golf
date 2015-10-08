@@ -3,6 +3,7 @@ var paper = require('paper');
 var paperColors = require('../paper.colors.js');
 var comet = require('../comet');
 var emitter = require('./emitter');
+var CloseButton = require('./CloseButton');
 var $ = require('$');
 
 module.exports = React.createClass({
@@ -78,7 +79,7 @@ module.exports = React.createClass({
           var text = new this._scope.PointText(new this._scope.Point(offset, shot.y + 3));
           text.fillColor = 'black';
           text.justification = (roundIdx % 2) ? 'right' : 'left';
-          text.content = (pointA.getDistance(pointB) * this.props.data.hole.scale_factor * 2).toFixed(0) + ' yds';
+          text.content = (pointA.getDistance(pointB) * this.props.data.hole.scale_factor).toFixed(0) + ' yds';
           paths.push(text);
 
           var context = new this._scope.Path({
@@ -216,13 +217,14 @@ module.exports = React.createClass({
     return (
       <div className="modal" onClick={this.props.close}>
         <div className="dialog" onClick={this.prevent}>
+          <CloseButton action={this.props.close} />
           <div className="left-slide"><i className="fa fa-angle-left btn" onClick={this.prevHole}></i></div>
           <div className="right-slide"><i className="fa fa-angle-right btn" onClick={this.nextHole}></i></div>
           <div className="hole-focus">
-            <table className="hole-info top">
+            <table className="hole-info top small">
               <tr>
                 <td colSpan="2">
-                  <div className="small">{this.props.data.round.name} round {this.props.data.round.round_number}</div>
+                  <div>{this.props.data.round.name} round {this.props.data.round.round_number}</div>
                 </td>
                 <td></td>
               </tr>
@@ -236,27 +238,27 @@ module.exports = React.createClass({
                 <td></td>
               </tr>
               <tr>
-                <td className="small">Distance</td>
+                <td>Distance</td>
                 <td>{this.props.data.hole[this.props.data.round.tees]} yds</td>
               </tr>
               <tr>
-                <td className="small">Par</td>
+                <td>Par</td>
                 <td>{this.props.data.hole.par}</td>
               </tr>
               <tr>
-                <td className="small">Score</td>
+                <td>Score</td>
                 <td>{overUnder[this.props.data.hole.over_under + 3]}</td>
               </tr>
               <tr>
-                <td className="small">Fairway in regulation</td> 
+                <td>Fairway in regulation</td> 
                 <td><span dangerouslySetInnerHTML={{__html: fir}} /></td>
               </tr>
               <tr>
-                <td className="small">Green in regulation</td>
+                <td>Green in regulation</td>
                 <td><span dangerouslySetInnerHTML={{__html: gir}} /></td>
               </tr>
               <tr>
-                <td className="small">Putts</td>
+                <td>Putts</td>
                 <td>{this.props.data.hole.putts}</td>
               </tr>
             </table>
@@ -267,20 +269,20 @@ module.exports = React.createClass({
               { this.state.editing ? <div className="btn edit small" onClick={this.cancel}>cancel</div> : null }
               <div className="hole-options small">
                 <div>
-                  <input name="view" id="current-hole" type="radio" value="CURRENT_HOLE" onChange={this.updateView} checked={this.state.view === 'CURRENT_HOLE'} /> 
                   <label htmlFor="current-hole">Current</label>
+                  <input name="view" id="current-hole" type="radio" value="CURRENT_HOLE" onChange={this.updateView} checked={this.state.view === 'CURRENT_HOLE'} /> 
                 </div>
                 <div>
-                  <input name="view" id="drives" type="radio" value="DRIVES" onChange={this.updateView} checked={this.state.view === 'DRIVES'} /> 
                   <label htmlFor="drives">Drives</label>
+                  <input name="view" id="drives" type="radio" value="DRIVES" onChange={this.updateView} checked={this.state.view === 'DRIVES'} /> 
                 </div>
                 <div>
-                  <input name="view" id="nd-shot" type="radio" value="2ND_SHOT" onChange={this.updateView} checked={this.state.view === '2ND_SHOT'} /> 
                   <label htmlFor="nd-shot">2nd Shot</label>
+                  <input name="view" id="nd-shot" type="radio" value="2ND_SHOT" onChange={this.updateView} checked={this.state.view === '2ND_SHOT'} /> 
                 </div>
                 <div>
-                  <input name="view" id="all-holes" type="radio" value="ALL_HOLES" onChange={this.updateView} checked={this.state.view === 'ALL_HOLES'} /> 
                   <label htmlFor="all-holes">All</label>
+                  <input name="view" id="all-holes" type="radio" value="ALL_HOLES" onChange={this.updateView} checked={this.state.view === 'ALL_HOLES'} /> 
                 </div>
               </div>
             </div>
