@@ -125,6 +125,8 @@ module.exports = function(grunt) {
     });
   });
 
+  grunt.registerTask('build', ['webpack', /* rewrite comet.router to include a build script here */]);
+
   grunt.registerTask('process', ['jshint', /*'qunit',*/ 'concat', 'uglify']);
 
   grunt.registerTask('default', ['concurrent:dev']);

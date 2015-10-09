@@ -76,11 +76,14 @@ module.exports = {
         var bogies = holes.filter(function(el) { return el.score === el.par + 1; }).length;
         var dblPlus = holes.filter(function(el) { return el.score > el.par + 1; }).length;
 
+        var putts = holes.reduce(function(memo, el) { return memo + el.putts; }, 0) / _.uniq(holes, 'round_id').length;
+
         callback({
           drives: drives,
           gir: greensInReg,
           parSaves: parSaves,
-          scores: [eagles, birdies, pars, bogies, dblPlus]
+          scores: [eagles, birdies, pars, bogies, dblPlus],
+          putts: putts
         });
       });
   },

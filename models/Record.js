@@ -144,8 +144,7 @@ record.staticMethods = {
       q += ' GROUP BY ??';
     }
     if (_.size(this.queryParams.order)) {
-      params.push(this.queryParams.order);
-      q += ' ORDER BY ??';
+      q += ' ORDER BY ' + this.queryParams.order.join(' ');
     }
     if (this.queryParams.limit) {
       params.push(this.queryParams.limit);

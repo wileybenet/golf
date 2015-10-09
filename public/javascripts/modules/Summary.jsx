@@ -9,7 +9,8 @@ module.exports = React.createClass({
         averageDrive: utils.average(data.drives, 'shot_distance'),
         gir: (data.gir * 100).toFixed(1),
         parSaves: (data.parSaves * 100).toFixed(1),
-        scores: data.scores
+        scores: data.scores,
+        putts: data.putts.toFixed(1)
       });
     }.bind(this));
   },
@@ -54,6 +55,7 @@ module.exports = React.createClass({
         <tr><td>Average Drive</td><td className="right">{this.state.averageDrive} yds</td></tr>
         <tr><td>Greens In Regulation</td><td className="right">{this.state.gir}%</td></tr>
         <tr><td>Par Saves</td><td className="right">{this.state.parSaves}%</td></tr>
+        <tr><td>Avg. Putts per Round</td><td className="right">{this.state.putts}</td></tr>
         <tr><td>Scores</td><td className="right">{scores}</td></tr>
       </table>
     );

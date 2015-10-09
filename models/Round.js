@@ -16,7 +16,7 @@ module.exports = require('./Record').createModel({
         "LEFT JOIN scores ON scores.round_id = rounds.id "+
         "LEFT JOIN holes ON holes.id = scores.hole_id")
       .group('rounds.id')
-      .order('date_str');
+      .order('date DESC');
     },
   },
   schema: [
