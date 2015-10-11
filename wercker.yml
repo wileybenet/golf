@@ -1,5 +1,5 @@
 # use the default golang container from Docker Hub
-box: wercker/nodejs
+box: node
 # The steps that will be executed in the build pipeline
 build:
   steps:
