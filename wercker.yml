@@ -18,14 +18,16 @@ build:
         code: sudo npm install
     - script: 
         name: build
-        code: |
+        code: |-
           grunt build
-
-deploy:
-  steps:
+          webpack
+          grunt webpack_build
     - script:
         name: check files
         code: ls $WERCKER_SOURCE_DIR/public/dist
+
+deploy:
+  steps:
     - script:
         name: Install Beanstalk CLI
         code: |-

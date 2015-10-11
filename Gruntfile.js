@@ -126,14 +126,14 @@ module.exports = function(grunt) {
   });
 
   grunt.registerTask('webpack_build', 'webpack[building]', function() {
-    // var done = this.async();
+    var done = this.async();
     var child = require('child_process').spawn('webpack');
     // child.stdout.on('data', function(data) {
     //   console.log(data.toString()); 
     // });
-    // child.on('close', function(err, stdout) {
-    //   done();
-    // });
+    child.on('close', function(err, stdout) {
+      done();
+    });
   });
 
   grunt.registerTask('comet_build', 'building comet assets', function() {
