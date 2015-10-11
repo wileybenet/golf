@@ -19,7 +19,8 @@ build:
     - script: 
         name: build
         code: |
-          grunt build
+          grunt comet_build
+          webpack
 
 deploy:
   steps:
