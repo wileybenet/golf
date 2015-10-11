@@ -142,8 +142,6 @@ module.exports = function(grunt) {
     comet.build();
   });
 
-  grunt.registerTask('build', ['comet_build', 'webpack_build']);
-
   grunt.registerTask('process', ['jshint', /*'qunit',*/ 'concat', 'uglify']);
 
   grunt.registerTask('default', ['build', 'concurrent:dev']);

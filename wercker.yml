@@ -20,7 +20,7 @@ build:
         name: build
         code: |-
           grunt comet_build
-          grunt webpack_build
+          webpack --progress --colors
     - script:
         name: check files
         code: ls $WERCKER_SOURCE_DIR/public/dist
