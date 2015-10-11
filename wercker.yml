@@ -41,7 +41,7 @@ deploy:
         name: Create AWS credential file
         filename: $AWS_CREDENTIAL_FILE
         content: |-
-            [default]
+            [eb-cli]
             aws_access_key_id = $KEY
             aws_secret_access_key = $SECRET_KEY
 
