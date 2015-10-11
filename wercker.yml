@@ -25,6 +25,9 @@ build:
 deploy:
   steps:
     - script:
+        name: check files
+        code: ls $WERCKER_SOURCE_DIR/public/dist
+    - script:
         name: Install Beanstalk CLI
         code: |-
           curl -O https://bootstrap.pypa.io/get-pip.py
