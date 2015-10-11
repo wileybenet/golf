@@ -1,26 +1,60 @@
-# use the default golang container from Docker Hub
+# This references a standard debian container from the
+# Docker Hub https://registry.hub.docker.com/_/debian/
+# Read more about containers on our dev center
+# http://devcenter.wercker.com/docs/containers/index.html
 box: wercker/nodejs
-# The steps that will be executed in the build pipeline
-build:
-  steps:
-    - script:
-      name: echo nodejs information
-      code: |
-        echo "node version $(node -v) running"
-        echo "npm version $(npm -v) running"
-    - script:
-      name: install dependencies
-      code: |
-        npm install -g grunt
-    - script: 
-      name: build
-      code: |
-        grunt build
+# You can also use services such as databases. Read more on our dev center:
+# http://devcenter.wercker.com/docs/services/index.html
+# services:
+    # - postgres
+    # http://devcenter.wercker.com/docs/services/postgresql.html
 
-deploy:
+    # - mongodb
+    # http://devcenter.wercker.com/docs/services/mongodb.html
+
+# This is the build pipeline. Pipelines are the core of wercker
+# Read more about pipelines on our dev center
+# http://devcenter.wercker.com/docs/pipelines/index.html
+build:
+    # Steps make up the actions in your pipeline
+    # Read more about steps on our dev center:
+    # http://devcenter.wercker.com/docs/steps/index.html
   steps:
     - install-packages:
         packages: curl
+    - script:
+        name: echo nodejs information
+        code: |
+            echo "node version $(node -v) running"
+            echo "npm version $(npm -v) running"
+    - script:
+        name: install meteor
+        code: curl https://install.meteor.com/ | sh
+    - script: 
+        name: check meteor version
+        code: meteor --version
+    - script: 
+        name: build source
+        code: |
+            cd $WERCKER_SOURCE_DIR
+            meteor build --directory $WERCKER_OUTPUT_DIR
+    - script:
+        name: install dependencies
+        code: |
+            mv $WERCKER_OUTPUT_DIR/bundle/* $WERCKER_OUTPUT_DIR
+            rm -rf $WERCKER_OUTPUT_DIR/bundle
+            cd $WERCKER_OUTPUT_DIR/programs/server
+            npm install
+            npm install fibers
+    - script:
+        name: move eb files
+        code: |
+            mv $WERCKER_SOURCE_DIR/.ebextensions $WERCKER_OUTPUT_DIR
+            ls -al $WERCKER_OUTPUT_DIR
+
+deploy:
+  steps:
+
     - script:
         name: Install Beanstalk CLI
         code: |-
