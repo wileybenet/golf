@@ -12,7 +12,7 @@ build:
           echo "npm version $(npm -v) running"
     - script:
         name: install grunt
-        code: sudo npm install -g grunt-cli      
+        code: sudo npm install -g grunt-cli webpack
     - script:
         name: install dependencies
         code: sudo npm install
