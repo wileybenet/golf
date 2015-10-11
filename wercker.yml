@@ -11,7 +11,7 @@ build:
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
     - script:
-        name: install grunt
+        name: install cli tools
         code: sudo npm install -g grunt-cli webpack
     - script:
         name: install dependencies
@@ -19,8 +19,7 @@ build:
     - script: 
         name: build
         code: |-
-          grunt build
-          webpack
+          grunt comet_build
           grunt webpack_build
     - script:
         name: check files
