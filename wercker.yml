@@ -15,7 +15,7 @@ build:
         code: sudo npm install -g grunt-cli      
     - script:
         name: install dependencies
-        code: npm install
+        code: sudo npm install
     - script: 
         name: build
         code: |
