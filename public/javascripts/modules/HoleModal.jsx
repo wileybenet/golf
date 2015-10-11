@@ -221,6 +221,30 @@ module.exports = React.createClass({
           <div className="left-slide"><i className="fa fa-angle-left btn" onClick={this.prevHole}></i></div>
           <div className="right-slide"><i className="fa fa-angle-right btn" onClick={this.nextHole}></i></div>
           <div className="hole-focus">
+            <div className="hole-map-wrapper top">
+              <img className="hidden" id="modal-hole-img" src={img} width="260" />
+              <canvas id="modal-hole-canvas" height="350" width="250" />
+              { this.state.editing ? <div className="btn save small" onClick={this.save}>save</div> : <div className="btn edit small" onClick={this.edit}>edit</div> }
+              { this.state.editing ? <div className="btn edit small" onClick={this.cancel}>cancel</div> : null }
+              <div className="hole-options small">
+                <div>
+                  <label htmlFor="current-hole">Current</label>
+                  <input name="view" id="current-hole" type="radio" value="CURRENT_HOLE" onChange={this.updateView} checked={this.state.view === 'CURRENT_HOLE'} /> 
+                </div>
+                <div>
+                  <label htmlFor="drives">Drives</label>
+                  <input name="view" id="drives" type="radio" value="DRIVES" onChange={this.updateView} checked={this.state.view === 'DRIVES'} /> 
+                </div>
+                <div>
+                  <label htmlFor="nd-shot">2nd Shot</label>
+                  <input name="view" id="nd-shot" type="radio" value="2ND_SHOT" onChange={this.updateView} checked={this.state.view === '2ND_SHOT'} /> 
+                </div>
+                <div>
+                  <label htmlFor="all-holes">All</label>
+                  <input name="view" id="all-holes" type="radio" value="ALL_HOLES" onChange={this.updateView} checked={this.state.view === 'ALL_HOLES'} /> 
+                </div>
+              </div>
+            </div>
             <table className="hole-info top small">
               <tr>
                 <td colSpan="2">
@@ -262,30 +286,6 @@ module.exports = React.createClass({
                 <td>{overUnder[this.props.data.hole.over_under + 3]}</td>
               </tr>
             </table>
-            <div className="hole-map-wrapper top">
-              <img className="hidden" id="modal-hole-img" src={img} width="260" />
-              <canvas id="modal-hole-canvas" height="350" width="250" />
-              { this.state.editing ? <div className="btn save small" onClick={this.save}>save</div> : <div className="btn edit small" onClick={this.edit}>edit</div> }
-              { this.state.editing ? <div className="btn edit small" onClick={this.cancel}>cancel</div> : null }
-              <div className="hole-options small">
-                <div>
-                  <label htmlFor="current-hole">Current</label>
-                  <input name="view" id="current-hole" type="radio" value="CURRENT_HOLE" onChange={this.updateView} checked={this.state.view === 'CURRENT_HOLE'} /> 
-                </div>
-                <div>
-                  <label htmlFor="drives">Drives</label>
-                  <input name="view" id="drives" type="radio" value="DRIVES" onChange={this.updateView} checked={this.state.view === 'DRIVES'} /> 
-                </div>
-                <div>
-                  <label htmlFor="nd-shot">2nd Shot</label>
-                  <input name="view" id="nd-shot" type="radio" value="2ND_SHOT" onChange={this.updateView} checked={this.state.view === '2ND_SHOT'} /> 
-                </div>
-                <div>
-                  <label htmlFor="all-holes">All</label>
-                  <input name="view" id="all-holes" type="radio" value="ALL_HOLES" onChange={this.updateView} checked={this.state.view === 'ALL_HOLES'} /> 
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

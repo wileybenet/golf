@@ -200,7 +200,7 @@ input[type=text] {
 
 .hole-options {
   position: absolute;
-  top: 0;
+  bottom: 40px;
   right: 0;
   text-align: right;
 }
