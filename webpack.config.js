@@ -1,3 +1,9 @@
+
+// polyfill
+if (global.Promise === null) {
+    global.Promise = require('es6-promise');
+}
+
 module.exports = {
   entry: './public/javascripts/app.jsx',
   output: {
