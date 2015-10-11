@@ -1,0 +1,78 @@
+# use the default golang container from Docker Hub
+box: wercker/nodejs
+# The steps that will be executed in the build pipeline
+build:
+  steps:
+    - script:
+      name: echo nodejs information
+      code: |
+        echo "node version $(node -v) running"
+        echo "npm version $(npm -v) running"
+    - script:
+      name: install dependencies
+      code: |
+        npm install -g grunt
+    - script: 
+      name: build
+      code: |
+        grunt build
+
+deploy:
+  steps:
+    - install-packages:
+        packages: curl
+    - script:
+        name: Install Beanstalk CLI
+        code: |-
+          curl -O https://bootstrap.pypa.io/get-pip.py
+          sudo python get-pip.py
+          sudo pip install awsebcli
+          sudo mkdir -p /usr/local/aws/elasticbeanstalk
+          mkdir -p "/home/ubuntu/.aws/"
+          mkdir -p "$WERCKER_SOURCE_DIR/.elasticbeanstalk/"
+          export PATH="/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH"
+          export AWS_CREDENTIAL_FILE="/home/ubuntu/.aws/credentials"
+          export EBS_CONFIG_FILE="$WERCKER_SOURCE_DIR/.elasticbeanstalk/config.yml"
+
+    - create-file:
+        name: Create AWS credential file
+        filename: $AWS_CREDENTIAL_FILE
+        content: |-
+            [default]
+            aws_access_key_id = $KEY
+            aws_secret_access_key = $SECRET_KEY
+
+    # Env conditional deploy steps
+    - script:
+        name: Run environment specific deploy steps
+        code: cat $WERCKER_SOURCE_DIR/.ebextensions/config.tpl > $EBS_CONFIG_FILE
+
+    # Remove the existing repository and re-add everything
+    # in a new repository that will be used to push it to beanstalk
+    # The last line in this script add the beanstalk hooks to the
+    # repository
+    - script:
+        name: Create deploy repository
+        code: |-
+            cd $WERCKER_SOURCE_DIR
+            git config --global user.email "pleasemailus@wercker.com"
+            git config --global user.name "wercker"
+
+            rm -rf $WERCKER_SOURCE_DIR/.git
+            echo ".elasticbeanstalk/" > .gitignore
+            git init
+            git add .
+            git commit -m "deploy commit"
+
+    # Check if beanstalk CLI is there
+    - script:
+        name: Initialize Beanstalk
+        code: |-
+            eb init
+
+    # Do the actual deploy via the aws.push hook that the Beanstalk CLI adds
+    - script:
+        name: Push it!
+        code: |-
+          git checkout master
+          eb deploy
