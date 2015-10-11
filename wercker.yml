@@ -59,7 +59,6 @@ deploy:
             cd $WERCKER_SOURCE_DIR
             git config --global user.email "pleasemailus@wercker.com"
             git config --global user.name "wercker"
-
             rm -rf $WERCKER_SOURCE_DIR/.git
             echo ".elasticbeanstalk/" > .gitignore
             git init
@@ -78,3 +77,7 @@ deploy:
         code: |-
           git checkout master
           eb deploy
+
+
+
+

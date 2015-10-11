@@ -59,6 +59,7 @@ function build() {
 
   fs.writeFileSync(path.resolve(distPath, 'comet.front.router.js'), mustache.render(frontDistTemplate, { routes: frontApi, namespaces: namespaces }));
   fs.writeFileSync(path.resolve(distPath, 'comet.back.router.js'), mustache.render(backDistTemplate, { namespaces: namespaces, routes: backApi }));
+  console.log('successfully built comet assets');
 }
 
 module.exports = {
