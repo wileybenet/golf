@@ -11,10 +11,11 @@ build:
           echo "node version $(node -v) running"
           echo "npm version $(npm -v) running"
     - script:
+        name: install grunt
+        code: sudo npm install -g grunt-cli      
+    - script:
         name: install dependencies
-        code: |
-          sudo npm install -g grunt-cli
-          npm install
+        code: npm install
     - script: 
         name: build
         code: |
