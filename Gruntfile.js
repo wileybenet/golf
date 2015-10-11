@@ -102,7 +102,7 @@ module.exports = function(grunt) {
       },
       public: {
         files: ['public/**/*'],
-        tasks: ['webpack'],
+        tasks: ['comet_build', 'webpack'],
         options: {
           livereload: true,
           spawn: false
@@ -125,10 +125,14 @@ module.exports = function(grunt) {
     });
   });
 
-  grunt.registerTask('build', ['webpack', /* rewrite comet.router to include a build script here */]);
+  grunt.registerTask('comet_build', 'building comet assets', function() {
+    var comet = require('./comet/build');
+
+    comet.build();
+  });
 
   grunt.registerTask('process', ['jshint', /*'qunit',*/ 'concat', 'uglify']);
 
-  grunt.registerTask('default', ['concurrent:dev']);
+  grunt.registerTask('default', ['comet_build', 'webpack', 'concurrent:dev']);
 
 };

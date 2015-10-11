@@ -6,9 +6,11 @@ module.exports = React.createClass({
   getStats: function(props) {    
     comet.api.stats(props.options, function(data) {
       this.setState({
-        averageDrive: utils.average(data.drives, 'shot_distance'),
+        averageDrive: utils.average(data.drives, 'shot_distance').toFixed(0),
+        fir: (data.fir * 100).toFixed(1),
         gir: (data.gir * 100).toFixed(1),
-        parSaves: (data.parSaves * 100).toFixed(1),
+        parSavesCount: data.parSaves[0] + '/' + data.parSaves[1],
+        parSavesPercent: (data.parSaves[0] / data.parSaves[1] * 100).toFixed(1),
         scores: data.scores,
         putts: data.putts.toFixed(1)
       });
@@ -53,9 +55,10 @@ module.exports = React.createClass({
       <table className="handicap-summary small">
         <tr><td>Handicap</td><td className="right">{handicapIndex}</td></tr>
         <tr><td>Average Drive</td><td className="right">{this.state.averageDrive} yds</td></tr>
+        <tr><td>Firways In Regulation</td><td className="right">{this.state.fir}%</td></tr>
         <tr><td>Greens In Regulation</td><td className="right">{this.state.gir}%</td></tr>
-        <tr><td>Par Saves</td><td className="right">{this.state.parSaves}%</td></tr>
-        <tr><td>Avg. Putts per Round</td><td className="right">{this.state.putts}</td></tr>
+        <tr><td>Par Saves</td><td className="right">{this.state.parSavesCount} ({this.state.parSavesPercent}%)</td></tr>
+        <tr><td>Putts</td><td className="right">{this.state.putts}</td></tr>
         <tr><td>Scores</td><td className="right">{scores}</td></tr>
       </table>
     );

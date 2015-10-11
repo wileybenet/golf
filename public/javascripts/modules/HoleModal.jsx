@@ -73,12 +73,12 @@ module.exports = React.createClass({
           fillColor: color
         }));
 
-        if (this.state.view === 'DRIVES' && idx === 1 && background) {
-          var offset = (roundIdx % 2) ? 60 : 200;
+        if ((this.state.view === 'DRIVES' || this.state.view === '2ND_SHOT') && idx === 1 && background) {
+          var offset = (roundIdx % 2) ? 200 : 60;
           var pointA = new this._scope.Point(shots[0].x, shots[0].y);
           var text = new this._scope.PointText(new this._scope.Point(offset, shot.y + 3));
           text.fillColor = 'black';
-          text.justification = (roundIdx % 2) ? 'right' : 'left';
+          text.justification = (roundIdx % 2) ? 'left' : 'right';
           text.content = (pointA.getDistance(pointB) * this.props.data.hole.scale_factor).toFixed(0) + ' yds';
           paths.push(text);
 
@@ -87,7 +87,7 @@ module.exports = React.createClass({
             strokeWidth: 1
           });
           context.lineTo(pointB);
-          context.lineTo(new this._scope.Point(offset + ((roundIdx % 2) ? 10 : -10), shot.y));
+          context.lineTo(new this._scope.Point(offset + ((roundIdx % 2) ? -10 : 10), shot.y));
           paths.push(context);
         }
       }.bind(this));
@@ -246,10 +246,6 @@ module.exports = React.createClass({
                 <td>{this.props.data.hole.par}</td>
               </tr>
               <tr>
-                <td>Score</td>
-                <td>{overUnder[this.props.data.hole.over_under + 3]}</td>
-              </tr>
-              <tr>
                 <td>Fairway in regulation</td> 
                 <td><span dangerouslySetInnerHTML={{__html: fir}} /></td>
               </tr>
@@ -260,6 +256,10 @@ module.exports = React.createClass({
               <tr>
                 <td>Putts</td>
                 <td>{this.props.data.hole.putts}</td>
+              </tr>
+              <tr>
+                <td>Score</td>
+                <td>{overUnder[this.props.data.hole.over_under + 3]}</td>
               </tr>
             </table>
             <div className="hole-map-wrapper top">

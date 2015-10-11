@@ -1,1 +1,1 @@
-module.exports = ['#26C9FF', '#FFB237'];
+module.exports = ['#26C9FF', '#FFB237', '#5ECC3E'];

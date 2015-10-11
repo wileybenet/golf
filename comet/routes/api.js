@@ -59,6 +59,13 @@ module.exports = {
               shot_distance: Math.round(Math.sqrt(Math.pow(shots[1].x - shots[0].x, 2) + Math.pow(shots[1].y - shots[0].y, 2)) * shots[0].scale_factor)
             };
           });
+        var fairwaysInReg = holes
+          .filter(function(el) {
+            return el.fir === 1;
+          }).length / 
+          holes.filter(function(el) {
+            return el.par !== 3;
+          }).length;
         var greensInReg = holes
           .filter(function(el) {
             return el.gir === 1;
@@ -66,9 +73,9 @@ module.exports = {
         var missedGreens = holes.filter(function(el) {
             return el.gir === 0;
           });
-        var parSaves = missedGreens.filter(function(el) {
+        var parSaves = [missedGreens.filter(function(el) {
             return el.score <= el.par;
-          }).length / missedGreens.length;
+          }).length, missedGreens.length];
 
         var eagles = holes.filter(function(el) { return el.score === el.par - 2; }).length;
         var birdies = holes.filter(function(el) { return el.score === el.par - 1; }).length;
@@ -80,6 +87,7 @@ module.exports = {
 
         callback({
           drives: drives,
+          fir: fairwaysInReg,
           gir: greensInReg,
           parSaves: parSaves,
           scores: [eagles, birdies, pars, bogies, dblPlus],

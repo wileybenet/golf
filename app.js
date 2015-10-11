@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var api = require('./routes/api');
-var comet = require('./comet/comet.router');
+var comet = require('./comet/dist/comet.back.router');
 
 var app = express();
 
