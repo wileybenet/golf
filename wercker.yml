@@ -48,7 +48,9 @@ deploy:
 
     - script:
         name: Check credentials
-        code: cat $AWS_CREDENTIAL_FILE
+        code: |
+            echo $AWS_CREDENTIAL_FILE
+            cat $AWS_CREDENTIAL_FILE
     # Env conditional deploy steps
     - script:
         name: Run environment specific deploy steps
