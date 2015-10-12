@@ -20,7 +20,10 @@ record.connect = function() {
 
   record.db.connect(function(err){
     if (err) {
-      console.log(process.env);
+      console.log('DB_HOST', process.env.DB_HOST);
+      console.log('DB_PORT', process.env.DB_PORT);
+      console.log('DB_USER', process.env.DB_USER);
+      console.log('DB_PASSWORD', process.env.DB_PASSWORD);
       throw err;
     }
     console.log('mysql connected');
