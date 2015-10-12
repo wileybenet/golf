@@ -4,6 +4,8 @@
  * Module dependencies.
  */
 
+console.log('running golf api');
+
 var app = require('../app');
 var debug = require('debug')('Golf:server');
 var http = require('http');
