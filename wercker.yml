@@ -3,9 +3,8 @@ box: node
 # The steps that will be executed in the build pipeline
 build:
   steps:
-    - script:
-        name: check versions
-        code: apt-get --version
+    - install-packages:
+        packages: python-dev libxml2-dev libxslt-dev
     - script:
         name: echo nodejs information
         code: |
