@@ -3,8 +3,9 @@ box: node
 # The steps that will be executed in the build pipeline
 build:
   steps:
-    - install-packages:
-        packages: curl gcc
+    - script:
+        name: check versions
+        code: python --version
     - script:
         name: echo nodejs information
         code: |
