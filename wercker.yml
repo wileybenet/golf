@@ -43,8 +43,8 @@ deploy:
         filename: $AWS_CREDENTIAL_FILE
         content: |
             [default]
-            aws_access_key_id=$KEY
-            aws_secret_access_key=$SECRET_KEY
+            aws_access_key_id = $KEY
+            aws_secret_access_key = $SECRET_KEY
 
     # Env conditional deploy steps
     - script:
