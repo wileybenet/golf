@@ -29,7 +29,6 @@ deploy:
         code: |-
           curl -O https://bootstrap.pypa.io/get-pip.py
           sudo python get-pip.py
-          pip uninstall pyyaml
           sudo pip install pyyaml
           sudo pip install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
