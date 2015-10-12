@@ -4,7 +4,7 @@ box: node
 build:
   steps:
     - install-packages:
-        packages: curl
+        packages: curl gcc gnu
     - script:
         name: echo nodejs information
         code: |
