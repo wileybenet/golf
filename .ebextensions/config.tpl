@@ -6,5 +6,5 @@ global:
   default_ec2_keyname: null
   default_platform: 64bit Amazon Linux 2015.03 v2.0.1 running Node.js
   default_region: us-east-1
-  profile: null
+  profile: default
   sc: git

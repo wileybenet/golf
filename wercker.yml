@@ -62,7 +62,7 @@ deploy:
             git config --global user.email "pleasemailus@wercker.com"
             git config --global user.name "wercker"
             rm -rf $WERCKER_SOURCE_DIR/.git
-            echo ".elasticbeanstalk/" > .gitignore
+            echo -e ".elasticbeanstalk/\node_modules" > .gitignore
             git init
             git add .
             git commit -m "deploy commit"
@@ -77,6 +77,8 @@ deploy:
         name: Push it!
         code: |-
           eb list
+          eb status
+          eb deploy
 
 
 
