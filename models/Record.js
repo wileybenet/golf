@@ -11,13 +11,13 @@ _.mixin(require('../services/lodash.mixin'));
 
 record.connect = function() {
   record.db = mysql.createConnection({
-    host     : 'utility.cwa125helopc.us-east-1.rds.amazonaws.com',
-    port     : '3306',
-    user     : 'wileybenet',
-    password : 'cronusforever',
-    database : 'golf'
+    host     : process.env.DB_HOST ||'localhost',
+    port     : process.env.DB_PORT ||'8889',
+    user     : process.env.DB_USER ||'root',
+    password : process.env.DB_PASSWORD ||'root',
+    database : schema = (process.env.DB_SCHEMA || 'golf')
   });
-  console.log('connecting to mysql');
+
   record.db.connect(function(err){
     if (err) {
       console.log('failed to connect to mysql');
