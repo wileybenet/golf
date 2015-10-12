@@ -10,10 +10,6 @@ var tableSchemas;
 _.mixin(require('../services/lodash.mixin'));
 
 record.connect = function() {
-  console.log('DB_HOST', process.env.DB_HOST);
-  console.log('DB_PORT', process.env.DB_PORT);
-  console.log('DB_USER', process.env.DB_USER);
-  console.log('DB_PASSWORD', process.env.DB_PASSWORD);
   record.db = mysql.createConnection({
     host     : process.env.DB_HOST ||'localhost',
     port     : process.env.DB_PORT ||'8889',
@@ -24,6 +20,7 @@ record.connect = function() {
 
   record.db.connect(function(err){
     if (err) {
+      console.log('failed to connect to mysql');
       throw err;
     }
     console.log('mysql connected');
