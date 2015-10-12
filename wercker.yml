@@ -41,7 +41,7 @@ deploy:
     - create-file:
         name: Create AWS credential file
         filename: $AWS_CREDENTIAL_FILE
-        content: |-
+        content: |
             [default]
             aws_access_key_id=$KEY
             aws_secret_access_key=$SECRET_KEY
@@ -49,7 +49,9 @@ deploy:
     # Env conditional deploy steps
     - script:
         name: Run environment specific deploy steps
-        code: cat $WERCKER_SOURCE_DIR/.ebextensions/config.tpl > $EBS_CONFIG_FILE
+        code: |
+          cat $WERCKER_SOURCE_DIR/.ebextensions/config.tpl > $EBS_CONFIG_FILE
+          cat $AWS_CREDENTIAL_FILE
 
     # Remove the existing repository and re-add everything
     # in a new repository that will be used to push it to beanstalk
