@@ -19,7 +19,10 @@ record.connect = function() {
   });
 
   record.db.connect(function(err){
-    if(err) throw err;
+    if (err) {
+      console.log(process.env);
+      throw err;
+    }
     console.log('mysql connected');
 
     record.mapSchemas();
