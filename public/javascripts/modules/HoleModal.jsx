@@ -270,6 +270,10 @@ module.exports = React.createClass({
                 <td>{this.props.data.hole.par}</td>
               </tr>
               <tr>
+                <td>Score</td>
+                <td>{overUnder[this.props.data.hole.over_under + 3]}</td>
+              </tr>
+              <tr>
                 <td>Fairway in regulation</td> 
                 <td><span dangerouslySetInnerHTML={{__html: fir}} /></td>
               </tr>
@@ -280,10 +284,6 @@ module.exports = React.createClass({
               <tr>
                 <td>Putts</td>
                 <td>{this.props.data.hole.putts}</td>
-              </tr>
-              <tr>
-                <td>Score</td>
-                <td>{overUnder[this.props.data.hole.over_under + 3]}</td>
               </tr>
             </table>
           </div>

@@ -38,10 +38,10 @@ module.exports = React.createClass({
           <div>{this.props.data.number}</div>
           <div>{this.props.data[this.props.round.tees]}</div>
           <div>{this.props.data.par}</div>
-          <div className={overUnder}>{this.props.data.score}</div>
           <div dangerouslySetInnerHTML={{__html: fir}} />
           <div dangerouslySetInnerHTML={{__html: gir}} />
           <div>{this.props.data.putts}</div>
+          <div className={overUnder}>{this.props.data.score}</div>
         </div>
       </div>
     );

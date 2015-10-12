@@ -85,8 +85,7 @@ input[type=text] {
   display: inline-block;
 }
 .round {
-  width: 220px;
-  margin: 20px 0;
+  padding: 10px 0 10px 10px;
   cursor: pointer;
   position: relative;
   border-right: 1px solid transparent;
@@ -95,7 +94,8 @@ input[type=text] {
 
 }
 .round.selected {
-  border-right-color: #CCC;
+  background-color: #E7F5FE;
+  border-right-color: #AAA;
 }
 .round-info {
   margin-left: 10px;
@@ -106,10 +106,10 @@ input[type=text] {
   height: 0;
   border: 9px solid transparent;
   border-left: 0;
-  border-right-color: #CCC;
+  border-right-color: #AAA;
   position: absolute;
   right: -1px;
-  top: 29px;
+  top: 39px;
 }
 .arrow-left div {
   width: 1px;

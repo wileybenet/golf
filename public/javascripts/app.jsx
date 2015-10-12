@@ -109,7 +109,7 @@ var Round = React.createClass({
     return { selectedRound: {} };
   },
   render: function() {
-    var map = '/images/course_layout/' + this.props.round.course_id + '.jpg';
+    var map = '/images/course_layout/' + this.props.round.course_id + '.png';
     var toPar = this.props.round.total_score - this.props.round.total_par;
     var overUnder = (toPar > 0) ? 'over' : 'under'; 
     var selected = this.props.round.id === this.state.selectedRound.id;
