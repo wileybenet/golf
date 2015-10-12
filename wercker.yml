@@ -42,7 +42,7 @@ deploy:
         name: Create AWS credential file
         filename: $AWS_CREDENTIAL_FILE
         content: |
-            [personal]
+            [default]
             aws_access_key_id = $KEY
             aws_secret_access_key = $SECRET_KEY
 
@@ -70,8 +70,7 @@ deploy:
     - script:
         name: Print Config
         code: |-
-            echo $AWS_CREDENTIAL_FILE
-            cat $AWS_CREDENTIAL_FILE
+            cat $EBS_CONFIG_FILE
 
     # Do the actual deploy via the aws.push hook that the Beanstalk CLI adds
     - script:
