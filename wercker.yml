@@ -20,10 +20,7 @@ build:
         name: build
         code: |-
           grunt comet_build
-          webpack --progress --colors
-    - script:
-        name: check files
-        code: ls $WERCKER_SOURCE_DIR/public/dist
+          grunt webpack_build
 
 deploy:
   steps:
@@ -32,6 +29,7 @@ deploy:
         code: |-
           curl -O https://bootstrap.pypa.io/get-pip.py
           sudo python get-pip.py
+          sudo pip install pyyaml
           sudo pip install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
           mkdir -p "/home/ubuntu/.aws/"
