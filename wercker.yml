@@ -27,9 +27,7 @@ deploy:
     - script:
         name: Install Beanstalk CLI
         code: |-
-          curl -O https://bootstrap.pypa.io/get-pip.py
-          sudo python get-pip.py
-          sudo pip install awsebcli
+          sudo apt-get install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
           mkdir -p "/home/ubuntu/.aws/"
           mkdir -p "$WERCKER_SOURCE_DIR/.elasticbeanstalk/"
