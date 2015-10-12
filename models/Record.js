@@ -28,6 +28,10 @@ record.connect = function() {
     record.mapSchemas();
   });
 
+  record.db.ping(function(err) {
+    console.log(err ? 'ping failed' : 'pinged');
+  });
+
   connectionCalled = true;
 };
 
