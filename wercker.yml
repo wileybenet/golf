@@ -46,6 +46,9 @@ deploy:
             aws_access_key_id = $KEY
             aws_secret_access_key = $SECRET_KEY
 
+    - script:
+        name: Check credentials
+        code: cat $AWS_CREDENTIAL_FILE
     # Env conditional deploy steps
     - script:
         name: Run environment specific deploy steps
@@ -66,11 +69,6 @@ deploy:
             git init
             git add .
             git commit -m "deploy commit"
-
-    - script:
-        name: Print Config
-        code: |-
-            cat $EBS_CONFIG_FILE
 
     # Do the actual deploy via the aws.push hook that the Beanstalk CLI adds
     - script:
