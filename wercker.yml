@@ -32,10 +32,10 @@ deploy:
           sudo pip install pyyaml
           sudo pip install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
-          mkdir -p "~/.aws/"
+          mkdir -p ~/.aws/
           mkdir -p "$WERCKER_SOURCE_DIR/.elasticbeanstalk/"
           export PATH="/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH"
-          export AWS_CREDENTIAL_FILE="~/.aws/credentials"
+          export AWS_CREDENTIAL_FILE=~/.aws/credentials
           export EBS_CONFIG_FILE="$WERCKER_SOURCE_DIR/.elasticbeanstalk/config.yml"
 
     - create-file:
