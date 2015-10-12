@@ -17,7 +17,7 @@ record.connect = function() {
     password : 'cronusforever',
     database : 'golf'
   });
-
+  console.log('connecting to mysql');
   record.db.connect(function(err){
     if (err) {
       console.log('failed to connect to mysql');
