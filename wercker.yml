@@ -76,10 +76,7 @@ deploy:
     - script:
         name: Push it!
         code: |-
-          git checkout master
           eb list
-          eb status
-          eb deploy
 
 
 
