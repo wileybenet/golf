@@ -70,7 +70,8 @@ deploy:
     - script:
         name: Print Config
         code: |-
-            cat $EBS_CONFIG_FILE
+            echo $AWS_CREDENTIAL_FILE
+            cat $AWS_CREDENTIAL_FILE
 
     # Do the actual deploy via the aws.push hook that the Beanstalk CLI adds
     - script:
