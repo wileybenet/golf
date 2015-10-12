@@ -49,9 +49,7 @@ deploy:
     # Env conditional deploy steps
     - script:
         name: Run environment specific deploy steps
-        code: |
-          cat $WERCKER_SOURCE_DIR/.ebextensions/config.tpl > $EBS_CONFIG_FILE
-          cat $AWS_CREDENTIAL_FILE
+        code: cat $WERCKER_SOURCE_DIR/.ebextensions/config.tpl > $EBS_CONFIG_FILE
 
     # Remove the existing repository and re-add everything
     # in a new repository that will be used to push it to beanstalk
@@ -68,6 +66,11 @@ deploy:
             git init
             git add .
             git commit -m "deploy commit"
+            
+    - script:
+        name: Print Config
+        code: |-
+            cat $EBS_CONFIG_FILE
 
     # Check if beanstalk CLI is there
     - script:
