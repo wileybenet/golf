@@ -35,7 +35,7 @@ deploy:
           mkdir -p "~/.aws/"
           mkdir -p "$WERCKER_SOURCE_DIR/.elasticbeanstalk/"
           export PATH="/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH"
-          export AWS_CREDENTIAL_FILE="/home/ubuntu/.aws/credentials"
+          export AWS_CREDENTIAL_FILE="~/.aws/credentials"
           export EBS_CONFIG_FILE="$WERCKER_SOURCE_DIR/.elasticbeanstalk/config.yml"
 
     - create-file:
