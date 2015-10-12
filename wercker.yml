@@ -5,7 +5,7 @@ build:
   steps:
     - script:
         name: check versions
-        code: python --version
+        code: apt-get --version
     - script:
         name: echo nodejs information
         code: |
@@ -30,7 +30,6 @@ deploy:
         code: |-
           curl -O https://bootstrap.pypa.io/get-pip.py
           sudo python get-pip.py
-          sudo pip install pyyaml
           sudo pip install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
           mkdir -p "/home/ubuntu/.aws/"
