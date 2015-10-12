@@ -4,7 +4,7 @@ box: node
 build:
   steps:
     - install-packages:
-        packages: python-dev libxml2-dev libxslt-dev
+        packages: unzip wget ruby git python
     - script:
         name: echo nodejs information
         code: |
@@ -27,7 +27,9 @@ deploy:
     - script:
         name: Install Beanstalk CLI
         code: |-
-          sudo apt-get install awsebcli
+          curl -O https://bootstrap.pypa.io/get-pip.py
+          sudo python get-pip.py
+          sudo pip install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
           mkdir -p "/home/ubuntu/.aws/"
           mkdir -p "$WERCKER_SOURCE_DIR/.elasticbeanstalk/"
