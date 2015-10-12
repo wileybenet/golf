@@ -32,7 +32,7 @@ deploy:
           sudo pip install pyyaml
           sudo pip install awsebcli
           sudo mkdir -p /usr/local/aws/elasticbeanstalk
-          mkdir -p "/home/ubuntu/.aws/"
+          mkdir -p "~/.aws/"
           mkdir -p "$WERCKER_SOURCE_DIR/.elasticbeanstalk/"
           export PATH="/usr/local/aws/elasticbeanstalk/eb/linux/python2.7:$PATH"
           export AWS_CREDENTIAL_FILE="/home/ubuntu/.aws/credentials"
@@ -71,8 +71,6 @@ deploy:
         name: Print Config
         code: |-
             cat $EBS_CONFIG_FILE
-            echo ~
-            ehco $WERCKER_SOURCE_DIR
 
     # Do the actual deploy via the aws.push hook that the Beanstalk CLI adds
     - script:
