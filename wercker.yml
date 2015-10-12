@@ -66,23 +66,18 @@ deploy:
             git init
             git add .
             git commit -m "deploy commit"
-            
+
     - script:
         name: Print Config
         code: |-
             cat $EBS_CONFIG_FILE
-
-    # Check if beanstalk CLI is there
-    - script:
-        name: Initialize Beanstalk
-        code: |-
-            eb init
 
     # Do the actual deploy via the aws.push hook that the Beanstalk CLI adds
     - script:
         name: Push it!
         code: |-
           git checkout master
+          eb status
           eb deploy
 
 
