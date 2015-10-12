@@ -42,7 +42,6 @@ deploy:
         name: Create AWS credential file
         filename: $AWS_CREDENTIAL_FILE
         content: |
-            [default]
             aws_access_key_id = AKIAJX7GH5HU25QTGPZQ
             aws_secret_access_key = 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
 
