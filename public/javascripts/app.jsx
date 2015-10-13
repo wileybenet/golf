@@ -36,7 +36,7 @@ var App = React.createClass({
         <div className="content-block">
           <Rounds />
         </div>
-        <div className="content-block">
+        <div className="content-block bordered">
           { this.state.round.id ? <Scorecard round={this.state.round} /> : null }
         </div>
         { this.state.modal === 'hole' ? <HoleModal data={this.state.modalData} close={this.closeModal} /> : null }
@@ -116,7 +116,6 @@ var Round = React.createClass({
     var classes = 'round ' + (selected ? 'selected' : '');
     return (
       <div className={classes} onClick={this.select}>
-        { selected ? <Arrow dir="left" /> : null }
         <div className="middle">
           <img src={map} height="60" />
         </div>

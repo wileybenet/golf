@@ -73,12 +73,11 @@ input[type=text] {
 
 .handicap-summary {
   position: relative;
-  margin-bottom: 20px;
   width: 100%;
 }
 
 .round-actions {
-  margin: 0 0 15px 0;
+  margin: 15px 0;
 }
 .round-list {
   width: 240px;
@@ -88,14 +87,14 @@ input[type=text] {
   padding: 10px 0 10px 10px;
   cursor: pointer;
   position: relative;
-  border-right: 1px solid transparent;
+  border-left: 10px solid transparent;
 }
 .round:hover {
-
+  background-color: #E7F5FE;
 }
 .round.selected {
   background-color: #E7F5FE;
-  border-right-color: #AAA;
+  border-left-color: #AAA;
 }
 .round-info {
   margin-left: 10px;
@@ -271,6 +270,12 @@ input[type=text] {
   display: inline-block;
   margin-right: 30px;
   position: relative;
+}
+.bordered {
+  border: 1px solid #DDD;
+}
+.padded {
+  padding: 10px;
 }
 .middle {
   vertical-align: middle;
