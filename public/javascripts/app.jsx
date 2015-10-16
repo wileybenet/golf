@@ -36,7 +36,7 @@ var App = React.createClass({
         <div className="content-block">
           <Rounds />
         </div>
-        <div className="content-block bordered">
+        <div className="content-block">
           { this.state.round.id ? <Scorecard round={this.state.round} /> : null }
         </div>
         { this.state.modal === 'hole' ? <HoleModal data={this.state.modalData} close={this.closeModal} /> : null }
@@ -58,7 +58,7 @@ var Rounds = React.createClass({
   render: function() {
     return (
       <div>
-        <Summary rounds={this.state.data} options={{}} />
+        <Summary rounds={this.state.data} options={{}} index={true} />
         <RoundList data={this.state.data} />
       </div>
     );

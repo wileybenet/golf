@@ -96,7 +96,7 @@ module.exports = React.createClass({
     ));
 
     return (
-      <div>
+      <div className="scorecard">
         {holeNodes}
       </div>
     );

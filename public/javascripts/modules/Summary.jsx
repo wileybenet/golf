@@ -16,6 +16,55 @@ module.exports = React.createClass({
       });
     }.bind(this));
   },
+  getHandicap: function() {
+    function bucket(differentials) {
+      if (differentials.length < 7) return differentials.slice(0, 1);
+      if (differentials.length < 9) return differentials.slice(0, 2);
+      if (differentials.length < 11) return differentials.slice(0, 3);
+      if (differentials.length < 13) return differentials.slice(0, 4);
+      if (differentials.length < 15) return differentials.slice(0, 5);
+      if (differentials.length < 17) return differentials.slice(0, 6);
+      if (differentials.length < 18) return differentials.slice(0, 7);
+      if (differentials.length < 19) return differentials.slice(0, 8);
+      if (differentials.length < 20) return differentials.slice(0, 9);
+      return differentials.slice(0, 10);
+    }
+    function index(handicaps) {
+      var filteredHandicaps = bucket(handicaps.slice(0, 20).sort(byScore));
+
+      var handicap = utils.average(filteredHandicaps, 'handicap');
+      var handicapIndex;
+      (handicap * 0.96).toFixed(10).replace(/^[^.]+\../, function(match) {
+        handicapIndex = match;
+      });
+      return handicapIndex;
+    }
+
+    function byScore(a, b) {
+      if (a.handicap > b.handicap) return 1;
+      if (a.handicap < b.handicap) return -1;
+      return 0;
+    }
+
+    function getHandicap(round) {
+      var rating = round[round.tees + '_rating'];
+      var slope = round[round.tees + '_slope'];
+
+      return {
+        handicap: Math.round((round.total_score - rating) * 113 / slope * 10) / 10
+      };
+    }
+
+    var handicapIndex;
+    var handicaps = this.props.rounds.map(getHandicap);
+    if (this.props.index) {
+      handicapIndex = index(handicaps);
+    } else {
+      handicapIndex = handicaps[0].handicap;
+    }
+
+    return handicapIndex;
+  },
   componentDidMount: function() {
     this.getStats(this.props);
   },
@@ -28,21 +77,7 @@ module.exports = React.createClass({
     };
   },
   render: function() {
-    function getHandicap(round) {
-      var rating = round[round.tees + '_rating'];
-      var slope = round[round.tees + '_slope'];
-
-      return {
-        handicap: Math.round((round.total_score - rating) * 113 / slope * 10) / 10
-      };
-    }
-
-    var handicaps = this.props.rounds.map(getHandicap);
-    var handicap = utils.average(handicaps, 'handicap');
-    var handicapIndex;
-    (handicap * 0.96).toFixed(10).replace(/^[^.]+\../, function(match) {
-      handicapIndex = match;
-    });
+    var handicapIndex = this.getHandicap();
 
     var scores = this.state.scores.map(function(scoreCount, idx) {
       var score = idx - 2;

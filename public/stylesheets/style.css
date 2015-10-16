@@ -1,6 +1,8 @@
 body {
   padding: 50px;
   font-family: sans-serif;
+  background-image: url('../images/backgrounds/sunset.jpg');
+  background-size: cover;
 }
 
 a {
@@ -27,7 +29,7 @@ input[type=text] {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(0, 0, 0, 0.38);
   z-index: 100;
   width: 100%;
   height: 100%;
@@ -35,7 +37,7 @@ input[type=text] {
 
 .modal .dialog {
   position: absolute;
-  top: 60px;
+  top: 100px;
   left: 50%;
   margin-left: -260px;
   width: 490px;
@@ -74,27 +76,37 @@ input[type=text] {
 .handicap-summary {
   position: relative;
   width: 100%;
+  padding: 4px 6px;
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  min-width: 285px;
+  max-width: 285px;
+  margin-bottom: 15px;
 }
 
 .round-actions {
   margin: 15px 0;
+  position: fixed;
+  bottom: 0px;
+  width: 297px;
+  text-align: center;
+  z-index: 10;
 }
-.round-list {
-  width: 240px;
-  display: inline-block;
-}
+.round-list {}
 .round {
   padding: 10px 0 10px 10px;
   cursor: pointer;
   position: relative;
   border-left: 10px solid transparent;
+  background-color: rgba(255, 255, 255, 0.8);
+  margin-bottom: 5px;
+  border-radius: 3px;
 }
 .round:hover {
   background-color: #E7F5FE;
 }
 .round.selected {
   background-color: #E7F5FE;
-  border-left-color: #AAA;
 }
 .round-info {
   margin-left: 10px;
@@ -120,7 +132,11 @@ input[type=text] {
   right: -11px;
   top: -9px;
 }
-
+.scorecard {
+  background-color: rgba(255, 255, 255, 0.8);
+  border-radius: 3px;
+  margin-bottom: 15px;
+}
 .hole {
   display: inline-block;
   vertical-align: top;
@@ -134,12 +150,14 @@ input[type=text] {
 }
 .hole > div {
   border: 1px solid transparent;
+  border-top: 0;
+  border-bottom: 0;
 }
 .hole-data {
   border-radius: 3px 3px 0 0;
 }
 .hole-data:hover {
-  border-color: #DDD;
+  border-color: #B7B5B5;
 }
 .hole-summary > div > div {
   background-color: rgba(105, 192, 245, 0.16);

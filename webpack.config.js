@@ -16,6 +16,7 @@ module.exports = {
       { test: /\.css$/, loader: 'style!css' },
       { test: /\.jsx$/, loader: 'jsx-loader?insertPragma=React.DOM&harmony' },
       { test: /\.png$/, loader: 'url-loader?limit=10000&minetype=image/png' },
+      { test: /\.jpg$/, loader: 'url-loader?limit=10000&minetype=image/jpg' },
       {
         test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
         loader: "url?limit=10000&mimetype=application/font-woff"
