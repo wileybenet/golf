@@ -83,7 +83,7 @@ module.exports = React.createClass({
       var score = idx - 2;
       var overUnder = 'over-under tiny over-under-' + score;
       return (
-        <div className={overUnder}>{scoreCount}</div>
+        <div className={overUnder} key={idx}>{scoreCount}</div>
       );
     });
     return (

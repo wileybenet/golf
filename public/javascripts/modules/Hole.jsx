@@ -1,5 +1,6 @@
 var React = require('react');
 var emitter = require('./emitter');
+var constants = require('../constants');
 
 module.exports = React.createClass({
   componentDidMount: function() {
@@ -20,7 +21,9 @@ module.exports = React.createClass({
     return { toggle: false };
   },
   render: function() {
-    var src = 'images/holes/' + this.props.data.course_id + '-' + this.props.data.number + '.png';
+    var styles = {
+      background: 'url(\'images/holes/' + this.props.data.course_id + '-small.png\') -' + ((this.props.data.number - 1) * constants.SCALE_FACTOR / 6.25) + 'px 0px no-repeat'
+    };
     var gir = this.props.data.gir ? '<i class="fa fa-circle"></i>' : '<i class="fa fa-circle-o"></i>';
     var fir = (this.props.data.par !== 3 ? (this.props.data.fir ? '<i class="fa fa-circle"></i>' : '<i class="fa fa-circle-o"></i>') : '&nbsp;');
     var overUnder = 'over-under over-under-' + (this.props.data.score - this.props.data.par);
@@ -33,7 +36,7 @@ module.exports = React.createClass({
 
     return (
       <div className={this.props.data.id ? 'hole-data' : 'hole-summary'} style={ { textAlign: this.props.data.align || 'center' } } onClick={this.props.data.id && this.open}>
-        {this.props.data.id ? <img className="hole-map" src={src} /> : <div className="hole-map" /> }
+        {this.props.data.id ? <div className="hole-map" style={styles} /> : <div className="hole-map" /> }
         <div className="info">
           <div>{this.props.data.number}</div>
           <div>{this.props.data[this.props.round.tees]}</div>

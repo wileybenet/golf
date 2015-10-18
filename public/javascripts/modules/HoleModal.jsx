@@ -4,6 +4,7 @@ var paperColors = require('../paper.colors.js');
 var comet = require('../comet');
 var emitter = require('./emitter');
 var CloseButton = require('./CloseButton');
+var constants = require('../constants');
 var $ = require('$');
 
 module.exports = React.createClass({
@@ -142,6 +143,7 @@ module.exports = React.createClass({
     if (this._editLayer)
       this._editLayer.remove();
 
+    this._image.position = new paper.Point(-(this.props.data.hole.number - 1) * constants.SCALE_FACTOR, 0);
     this._scope.view.draw();
 
     this.getShots(this.drawShots);
@@ -152,9 +154,8 @@ module.exports = React.createClass({
     this._scope = new paper.PaperScope();
     this._scope.setup(canvas);
 
-    var raster = new this._scope.Raster('modal-hole-img');
-    raster.position = this._scope.view.center;
-    raster.scale(0.5);
+    this._image = new this._scope.Raster('modal-hole-img');
+    this._image.pivot = new paper.Point(-2250, -175);
 
     this._scope.view.draw();
   },
@@ -209,7 +210,7 @@ module.exports = React.createClass({
     var this_ = this;
 
     var overUnder = ['Double Eagle', 'Eagle', 'Birdie', 'Par', 'Bogie', 'Double Bogie', 'Triple Bogie', 'Quadruple Bogie'];
-    var img = 'images/holes/' + this.props.data.round.course_id + '-' + this.props.data.hole.number + '.png';
+    var img = 'images/holes/' + this.props.data.round.course_id + '.png';
     var gir = this.props.data.hole.gir ? '<i class="fa fa-circle"></i>' : '<i class="fa fa-circle-o"></i>';
     var fir = (this.props.data.hole.par !== 3 ? (this.props.data.hole.fir ? '<i class="fa fa-circle"></i>' : '<i class="fa fa-circle-o"></i>') : '&nbsp;');
 
