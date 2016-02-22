@@ -1,36 +1,44 @@
 0 info it worked if it ends with ok
-1 verbose cli [ 'node', '/usr/local/bin/npm', 'start' ]
-2 info using npm@2.5.1
-3 info using node@v0.12.0
-4 verbose node symlink /usr/local/bin/node
-5 verbose run-script [ 'prestart', 'start', 'poststart' ]
-6 info prestart Golf@0.0.0
-7 info start Golf@0.0.0
-8 verbose unsafe-perm in lifecycle true
-9 info Golf@0.0.0 Failed to exec start script
-10 verbose stack Error: Golf@0.0.0 start: `node ./bin/www`
-10 verbose stack Exit status 1
-10 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:213:16)
-10 verbose stack     at EventEmitter.emit (events.js:110:17)
-10 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:14:12)
-10 verbose stack     at ChildProcess.emit (events.js:110:17)
-10 verbose stack     at maybeClose (child_process.js:1008:16)
-10 verbose stack     at Process.ChildProcess._handle.onexit (child_process.js:1080:5)
-11 verbose pkgid Golf@0.0.0
-12 verbose cwd /Users/wjb/Play/golf
-13 error Darwin 14.5.0
-14 error argv "node" "/usr/local/bin/npm" "start"
-15 error node v0.12.0
-16 error npm  v2.5.1
-17 error code ELIFECYCLE
-18 error Golf@0.0.0 start: `node ./bin/www`
-18 error Exit status 1
-19 error Failed at the Golf@0.0.0 start script 'node ./bin/www'.
-19 error This is most likely a problem with the Golf package,
-19 error not with npm itself.
-19 error Tell the author that this fails on your system:
-19 error     node ./bin/www
-19 error You can get their info via:
-19 error     npm owner ls Golf
-19 error There is likely additional logging output above.
-20 verbose exit [ 1, true ]
+1 verbose cli [ '/usr/local/Cellar/node/0.12.0/bin/node',
+1 verbose cli   '/usr/local/bin/npm',
+1 verbose cli   'start' ]
+2 info using npm@3.3.6
+3 info using node@v5.0.0
+4 verbose run-script [ 'prestart', 'start', 'poststart' ]
+5 info lifecycle Golf@0.0.0~prestart: Golf@0.0.0
+6 silly lifecycle Golf@0.0.0~prestart: no script for prestart, continuing
+7 info lifecycle Golf@0.0.0~start: Golf@0.0.0
+8 verbose lifecycle Golf@0.0.0~start: unsafe-perm in lifecycle true
+9 verbose lifecycle Golf@0.0.0~start: PATH: /usr/local/lib/node_modules/npm/bin/node-gyp-bin:/Users/wjb/Play/golf/node_modules/.bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/X11/bin:/usr/local/mongodb/bin:/Users/wjb/Work/phantomjs-2.0.0-macosx/bin:/Users/wjb/.rvm/bin
+10 verbose lifecycle Golf@0.0.0~start: CWD: /Users/wjb/Play/golf
+11 silly lifecycle Golf@0.0.0~start: Args: [ '-c', 'node ./bin/www' ]
+12 silly lifecycle Golf@0.0.0~start: Returned: code: 1  signal: null
+13 info lifecycle Golf@0.0.0~start: Failed to exec start script
+14 verbose stack Error: Golf@0.0.0 start: `node ./bin/www`
+14 verbose stack Exit status 1
+14 verbose stack     at EventEmitter.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/lifecycle.js:233:16)
+14 verbose stack     at emitTwo (events.js:87:13)
+14 verbose stack     at EventEmitter.emit (events.js:172:7)
+14 verbose stack     at ChildProcess.<anonymous> (/usr/local/lib/node_modules/npm/lib/utils/spawn.js:24:14)
+14 verbose stack     at emitTwo (events.js:87:13)
+14 verbose stack     at ChildProcess.emit (events.js:172:7)
+14 verbose stack     at maybeClose (internal/child_process.js:818:16)
+14 verbose stack     at Process.ChildProcess._handle.onexit (internal/child_process.js:211:5)
+15 verbose pkgid Golf@0.0.0
+16 verbose cwd /Users/wjb/Play/golf
+17 error Darwin 15.2.0
+18 error argv "/usr/local/Cellar/node/0.12.0/bin/node" "/usr/local/bin/npm" "start"
+19 error node v5.0.0
+20 error npm  v3.3.6
+21 error code ELIFECYCLE
+22 error Golf@0.0.0 start: `node ./bin/www`
+22 error Exit status 1
+23 error Failed at the Golf@0.0.0 start script 'node ./bin/www'.
+23 error This is most likely a problem with the Golf package,
+23 error not with npm itself.
+23 error Tell the author that this fails on your system:
+23 error     node ./bin/www
+23 error You can get their info via:
+23 error     npm owner ls Golf
+23 error There is likely additional logging output above.
+24 verbose exit [ 1, true ]

@@ -61,6 +61,7 @@ module.exports = React.createClass({
         strokeJoin: 'round'
       });
       var paths = [];
+      var prevShot = shots[0];
       shots.forEach(function(shot, idx) {
         var widthCalc = width1 / 2;
         var pointB = new this._scope.Point(shot.x, shot.y);
@@ -74,9 +75,9 @@ module.exports = React.createClass({
           fillColor: color
         }));
 
-        if ((this.state.view === 'DRIVES' || this.state.view === '2ND_SHOT') && idx === 1 && background) {
+        if ((this.state.view === 'CURRENT_HOLE' || this.state.view === 'DRIVES' || this.state.view === '2ND_SHOT') && idx >= 1 && background) {
           var offset = (roundIdx % 2) ? 200 : 60;
-          var pointA = new this._scope.Point(shots[0].x, shots[0].y);
+          var pointA = new this._scope.Point(prevShot.x, prevShot.y);
           var text = new this._scope.PointText(new this._scope.Point(offset, shot.y + 3));
           text.fillColor = 'black';
           text.justification = (roundIdx % 2) ? 'left' : 'right';
@@ -91,6 +92,7 @@ module.exports = React.createClass({
           context.lineTo(new this._scope.Point(offset + ((roundIdx % 2) ? -10 : 10), shot.y));
           paths.push(context);
         }
+        prevShot = shot;
       }.bind(this));
 
       paths.push(path);
