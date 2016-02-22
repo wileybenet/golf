@@ -23,7 +23,7 @@ build:
 deploy:
   steps:
     - install-packages:
-        packages: unzip wget git python libyaml-dev libpython2.7-dev
+        packages: wget git python libyaml-dev libpython2.7-dev
     - script:
         name: Install Beanstalk CLI
         code: |-
