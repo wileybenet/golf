@@ -93,6 +93,10 @@ module.exports = React.createClass({
           paths.push(context);
         }
         prevShot = shot;
+        
+        if (this.state.view === 'CURRENT_HOLE') {
+          roundIdx++;
+        }
       }.bind(this));
 
       paths.push(path);
